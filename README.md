@@ -101,6 +101,9 @@ one latitude / longitude position using a level 30 z-order curve. The implementa
 also allows for 'half'-levels, e.g. precision 11 use `11*5 = 55bit` corresponds to a
 level 27.5 z-order curve.
 
+**Note**: The parameter (and returns) order changed from lat/lng in `geohash` to lng/lat. Apart
+from that this package is a drop-in replacement for the original `geohash`.
+
 Geohash representation details
 ------------------------------
 
