@@ -92,6 +92,9 @@ use [z-order](https://en.wikipedia.org/wiki/Z-order_curve) space filling curves,
 this package uses [hilbert](https://en.wikipedia.org/wiki/Hilbert_curve) curves.
 (The kernel for this package was adapted from [wiki](https://en.wikipedia.org/wiki/Hilbert_curve)).
 
+**Note**: The parameter (and returns) order changed from lat/lng in `geohash` to lng/lat. Apart
+from that this package is a drop-in replacement for the original `geohash`.
+
 Further, the string representation is changed (and modifieable) to compensate for
 the special requirements of the implementation: `geohash` uses a modified base32
 representation, i.e. every character in the geohash encodes 5 bits. Even bits
@@ -100,9 +103,6 @@ level of the z-order curve, e.g. the default precision of 12 use `12*5 = 60bit` 
 one latitude / longitude position using a level 30 z-order curve. The implementation
 also allows for 'half'-levels, e.g. precision 11 use `11*5 = 55bit` corresponds to a
 level 27.5 z-order curve.
-
-**Note**: The parameter (and returns) order changed from lat/lng in `geohash` to lng/lat. Apart
-from that this package is a drop-in replacement for the original `geohash`.
 
 Geohash representation details
 ------------------------------
@@ -115,6 +115,9 @@ All keep the same ordering as their integer value by lexicographical order:
 - base4: each character is in `'0123'`
 - base16: each character is in `'0123456789abcdef'`
 - base64: each character is in `'0123456789@ABCDEFGHIJKLMNOPQRSTUVWXYZ_abcdefghijklmnopqrstuvwxyz'`
+
+**Note**: Do not mix geohashes from the original `geohash` and this, and do not mix base4, base16 and base64
+geohash representations. Decide for one representation and then stick to it.
 
 The different encodings also give a more fine grain control of the actual encoding
 precision and the geohash size:
