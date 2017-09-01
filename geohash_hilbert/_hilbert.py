@@ -89,7 +89,7 @@ def decode_exactly(code, bits_per_char=6):
     lng, lat = _int2coord(x, y, dim)
     lng_err, lat_err = _dim_error(level)  # level of hilbert curve is bits / 2
 
-    return lng+lng_err, lat + lat_err, lng_err, lat_err
+    return lng + lng_err, lat + lat_err, lng_err, lat_err
 
 
 def _dim_error(level):
