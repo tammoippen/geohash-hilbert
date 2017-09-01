@@ -1,6 +1,8 @@
 geohash-hilbert
 ===============
 
+[![Build Status](https://travis-ci.org/tammoippen/geohash-hilbert.svg?branch=master)](https://travis-ci.org/tammoippen/geohash-hilbert)
+
 Geohash a lng/lat coordinate using hilbert space filling curves.
 
 ```python
