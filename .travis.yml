@@ -23,7 +23,7 @@ install:
   - if [ $WITH_CYTHON -eq 1 ]; then
       pip install cython ;
     fi
-  - pip install .
+  - pip install -v .
   - pip install -r tests/requirements.txt
 
 script: PYTHONPATH=$PWD pytest -v --flake8 --cov-report=term-missing --cov=geohash_hilbert
