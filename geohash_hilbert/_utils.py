@@ -23,31 +23,31 @@ def neighbours(code, bits_per_char=6):
     lng, lat, lng_err, lat_err = decode_exactly(code, bits_per_char)
     precision = len(code)
 
-    north = lat + 2*lat_err
+    north = lat + 2 * lat_err
     if north > 90:
         north -= 180
 
-    south = lat - 2*lat_err
+    south = lat - 2 * lat_err
     if south < -90:
         north += 180
 
-    east = lng + 2*lng_err
+    east = lng + 2 * lng_err
     if east > 180:
         east -= 360
 
-    west = lng - 2*lng_err
+    west = lng - 2 * lng_err
     if west < -180:
         west += 360
 
     return {
-        'north':      encode(lng,  north, precision, bits_per_char),
-        'north-east': encode(east, north, precision, bits_per_char),
-        'north-west': encode(west, north, precision, bits_per_char),
-        'east':       encode(east, lat,   precision, bits_per_char),
-        'west':       encode(west, lat,   precision, bits_per_char),
-        'south':      encode(lng,  south, precision, bits_per_char),
-        'south-east': encode(east, south, precision, bits_per_char),
-        'south-west': encode(west, south, precision, bits_per_char),
+        'north':      encode(lng,  north, precision, bits_per_char),  # noqa: E241
+        'north-east': encode(east, north, precision, bits_per_char),  # noqa: E241
+        'north-west': encode(west, north, precision, bits_per_char),  # noqa: E241
+        'east':       encode(east, lat,   precision, bits_per_char),  # noqa: E241
+        'west':       encode(west, lat,   precision, bits_per_char),  # noqa: E241
+        'south':      encode(lng,  south, precision, bits_per_char),  # noqa: E241
+        'south-east': encode(east, south, precision, bits_per_char),  # noqa: E241
+        'south-west': encode(west, south, precision, bits_per_char),  # noqa: E241
     }
 
 
