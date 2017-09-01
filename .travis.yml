@@ -10,12 +10,19 @@ python:
   - '3.6'
   - nightly
 
+env:
+  - WITH_CYTHON=1
+  - WITH_CYTHON=0
+
 addons:
   apt:
     packages:
       - pandoc
 
 install:
+  - if [ $WITH_CYTHON -eq 1 ]; then
+      pip install cython ;
+    fi
   - pip install .
   - pip install -r tests/requirements.txt
 
