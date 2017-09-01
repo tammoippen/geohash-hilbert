@@ -17,6 +17,7 @@ env:
 addons:
   apt:
     packages:
+      - build-essential
       - pandoc
 
 install:
@@ -25,6 +26,7 @@ install:
     fi
   - pip install -v .
   - pip install -r tests/requirements.txt
+  - time python -c 'import geohash_hilbert as ghh; print(ghh.encode(6.957036, 50.941291))'
 
 script: PYTHONPATH=$PWD pytest -v --flake8 --cov-report=term-missing --cov=geohash_hilbert
 
