@@ -130,7 +130,7 @@ def _coord2int(lng, lat, dim):
     lat_y = (lat + _LAT_INTERVAL[1]) / 180.0 * dim   # [0 ... dim)
     lng_x = (lng + _LNG_INTERVAL[1]) / 360.0 * dim  # [0 ... dim)
 
-    return floor(lng_x), floor(lat_y)
+    return int(floor(lng_x)), int(floor(lat_y))
 
 
 def _int2coord(x, y, dim):

@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-from __future__ import absolute_import, division, print_function, unicode_literals
+from __future__ import absolute_import, division, print_function
 
 from setuptools import find_packages, setup
 
@@ -7,7 +7,7 @@ setup_cython = dict()
 try:
     from Cython.Build import cythonize
     setup_cython = dict(ext_modules=cythonize('geohash_hilbert/_hilbert_cython.pyx'))
-except:
+except ImportError:
     pass
 
 try:
