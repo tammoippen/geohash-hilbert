@@ -31,7 +31,7 @@ def encode(lng, lat, precision=10, bits_per_char=6):
     '''
     assert _LNG_INTERVAL[0] <= lng <= _LNG_INTERVAL[1]
     assert _LAT_INTERVAL[0] <= lat <= _LAT_INTERVAL[1]
-    assert precision >= 0
+    assert precision > 0
     assert bits_per_char in (2, 4, 6)
 
     bits = precision * bits_per_char
@@ -59,6 +59,7 @@ def decode(code, bits_per_char=6):
         Tuple[float, float]:  (lng, lat) coordinate for the geohash.
     '''
     assert bits_per_char in (2, 4, 6)
+    assert len(code) > 0
 
     lng, lat, _lng_err, _lat_err = decode_exactly(code, bits_per_char)
     return lng, lat
@@ -80,6 +81,7 @@ def decode_exactly(code, bits_per_char=6):
         Tuple[float, float, float, float]:  (lng, lat, lng-error, lat-error) coordinate for the geohash.
     '''
     assert bits_per_char in (2, 4, 6)
+    assert len(code) > 0
 
     bits = len(code) * bits_per_char
     level = bits >> 1

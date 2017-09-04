@@ -14,6 +14,22 @@ cdef unsigned long long cy_xy2hash_cython(unsigned long long x,
     return d
 
 def xy2hash_cython(x: long, y: long, dim: int) -> long:
+    '''Convert (x, y) to hashcode.
+
+    Based on the implementation here:
+        https://en.wikipedia.org/w/index.php?title=Hilbert_curve&oldid=797332503
+
+    Cython implementation.
+
+    Parameters:
+        x: int        x value of point [0, dim) in dim x dim coord system
+        y: int        y value of point [0, dim) in dim x dim coord system
+        dim: int      Number of coding points each x, y value can take.
+                      Corresponds to 2^level of the hilbert curve.
+
+    Returns:
+        int: hashcode \in [0, dim**2)
+    '''
     return cy_xy2hash_cython(x, y, dim)
 
 
@@ -36,6 +52,21 @@ cdef void cy_hash2xy_cython(unsigned long long hashcode,
 
 
 cpdef hash2xy_cython(unsigned long long hashcode, const unsigned long long dim):
+    '''Convert hashcode to (x, y).
+
+    Based on the implementation here:
+        https://en.wikipedia.org/w/index.php?title=Hilbert_curve&oldid=797332503
+
+    Cython implementation.
+
+    Parameters:
+        hashcode: int  Hashcode to decode [0, dim**2)
+        dim: int       Number of coding points each x, y value can take.
+                       Corresponds to 2^level of the hilbert curve.
+
+    Returns:
+        Tuple[int, int]: (x, y) point in dim x dim-grid system
+    '''
     cdef unsigned long long x, y
     x = y = 0
 

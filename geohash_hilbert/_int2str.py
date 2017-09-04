@@ -81,6 +81,8 @@ def _encode_int16(code):
 
 
 def _decode_int16(t):
+    if len(t) == 0:
+        return 0
     return int(t, 16)
 
 
@@ -94,4 +96,6 @@ def _encode_int4(code):
 
 
 def _decode_int4(t):
+    if len(t) == 0:
+        return 0
     return int(t, 4)
