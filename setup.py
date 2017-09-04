@@ -30,5 +30,6 @@ setup(
     url='https://github.com/tammoippen/geohash-hilbert',
     download_url='https://github.com/tammoippen/geohash-hilbert/archive/v{}.tar.gz'.format(version),
     keywords=['geohash', 'hilbert', 'space filling curve', 'geometry'],
+    include_package_data=True,
     **setup_cython
 )

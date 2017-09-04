@@ -1,0 +1,3 @@
+include README.md
+recursive-include geohash_hilbert *.pyx *.py
+recursive-exclude geohash_hilbert *.so *.c *.pyc
