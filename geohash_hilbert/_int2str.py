@@ -61,11 +61,12 @@ _BASE64_MAP = {c: i for i, c in enumerate(_BASE64)}
 
 
 def _encode_int64(code):
-    res = []
-    while code > 0:
-        res.append(_BASE64[code & 0b111111])
+    code_len = (code.bit_length() + 5) // 6  # 6 bit per code point
+    res = ['0'] * code_len
+    for i in range(code_len - 1, -1, -1):
+        res[i] = _BASE64[code & 0b111111]
         code >>= 6
-    return ''.join(reversed(res))
+    return ''.join(res)
 
 
 def _decode_int64(t):
@@ -91,11 +92,14 @@ def _decode_int16(t):
 
 def _encode_int4(code):
     _BASE4 = '0123'
-    res = []
-    while code > 0:
-        res.append(_BASE4[code & 0b11])
+    code_len = (code.bit_length() + 1) // 2  # two bit per code point
+    res = ['0'] * code_len
+
+    for i in range(code_len - 1, -1, -1):
+        res[i] = _BASE4[code & 0b11]
         code >>= 2
-    return ''.join(reversed(res))
+
+    return ''.join(res)
 
 
 def _decode_int4(t):
