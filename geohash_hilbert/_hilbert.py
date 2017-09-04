@@ -87,12 +87,12 @@ def decode_exactly(code, bits_per_char=6):
 
     x, y = _hash2xy(decode_int(code, bits_per_char), dim)
     lng, lat = _int2coord(x, y, dim)
-    lng_err, lat_err = _dim_error(level)  # level of hilbert curve is bits / 2
+    lng_err, lat_err = _lvl_error(level)  # level of hilbert curve is bits / 2
 
     return lng + lng_err, lat + lat_err, lng_err, lat_err
 
 
-def _dim_error(level):
+def _lvl_error(level):
     '''Get the lng/lat error for the hilbert curve with the given level
 
     On every level, the error of the hilbert curve is halved, e.g.
@@ -130,7 +130,7 @@ def _coord2int(lng, lat, dim):
     lat_y = (lat + _LAT_INTERVAL[1]) / 180.0 * dim   # [0 ... dim)
     lng_x = (lng + _LNG_INTERVAL[1]) / 360.0 * dim  # [0 ... dim)
 
-    return int(floor(lng_x)), int(floor(lat_y))
+    return min(dim - 1, int(floor(lng_x))), min(dim - 1, int(floor(lat_y)))
 
 
 def _int2coord(x, y, dim):
@@ -168,6 +168,8 @@ except:
         Based on the implementation here:
             https://en.wikipedia.org/w/index.php?title=Hilbert_curve&oldid=797332503
 
+        Pure python implementation.
+
         Parameters:
             x: int        x value of point [0, dim) in dim x dim coord system
             y: int        y value of point [0, dim) in dim x dim coord system
@@ -192,6 +194,8 @@ except:
 
         Based on the implementation here:
             https://en.wikipedia.org/w/index.php?title=Hilbert_curve&oldid=797332503
+
+        Pure python implementation.
 
         Parameters:
             hashcode: int  Hashcode to decode [0, dim**2)
