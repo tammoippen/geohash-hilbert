@@ -175,7 +175,6 @@ def _int2coord(x, y, dim):
     return lng, lat
 
 
-
 # only use python versions, when cython is not available
 def _xy2hash(x, y, dim):
     '''Convert (x, y) to hashcode.
@@ -203,6 +202,7 @@ def _xy2hash(x, y, dim):
         x, y = _rotate(lvl, x, y, rx, ry)
         lvl >>= 1
     return d
+
 
 def _hash2xy(hashcode, dim):
     '''Convert hashcode to (x, y).
@@ -232,6 +232,7 @@ def _hash2xy(hashcode, dim):
         hashcode >>= 2
         lvl <<= 1
     return x, y
+
 
 def _rotate(n, x, y, rx, ry):
     '''Rotate and flip a quadrant appropriately
