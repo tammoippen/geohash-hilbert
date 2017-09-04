@@ -1,6 +1,7 @@
 flake8-import-order
 pep8-naming
 pytest
+pytest-benchmark
 pytest-cov
 pytest-flake8
 six

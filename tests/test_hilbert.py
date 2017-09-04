@@ -15,7 +15,7 @@ def rand_lat():
     return random() * 180 - 90
 
 
-@pytest.mark.parametrize('prec', range(1, 11))
+@pytest.mark.parametrize('prec', range(1, 15))
 @pytest.mark.parametrize('bpc', (2, 4, 6))
 def test_encode_decode(bpc, prec):
     for _i in range(100):
@@ -27,6 +27,21 @@ def test_encode_decode(bpc, prec):
         assert lat == pytest.approx(lat_code, abs=lat_err)
 
         assert (lng_code, lat_code) == hilbert.decode(code, bits_per_char=bpc)
+
+
+@pytest.mark.parametrize('bpc', (2, 4, 6))
+def test_bench_encode(benchmark, bpc):
+    prec = 60 // bpc
+    lng, lat = rand_lng(), rand_lat()
+    benchmark(hilbert.encode, lng, lat, precision=prec, bits_per_char=bpc)
+
+
+@pytest.mark.parametrize('bpc', (2, 4, 6))
+def test_bench_decode(benchmark, bpc):
+    prec = 60 // bpc
+    lng, lat = rand_lng(), rand_lat()
+    code = hilbert.encode(lng, lat, precision=prec, bits_per_char=bpc)
+    benchmark(hilbert.decode_exactly, code, bits_per_char=bpc)
 
 
 def test_lvl_error():
