@@ -77,7 +77,7 @@ def _decode_int64(t):
 
 
 def _encode_int16(code):
-    return hex(code)[2:]
+    return '' + hex(code)[2:]  # this makes it unicode in py2
 
 
 def _decode_int16(t):
