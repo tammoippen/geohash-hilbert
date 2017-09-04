@@ -2,6 +2,7 @@ geohash-hilbert
 ===============
 
 [![Build Status](https://travis-ci.org/tammoippen/geohash-hilbert.svg?branch=master)](https://travis-ci.org/tammoippen/geohash-hilbert)
+[![Coverage Status](https://coveralls.io/repos/github/tammoippen/geohash-hilbert/badge.svg?branch=master)](https://coveralls.io/github/tammoippen/geohash-hilbert?branch=master)
 
 Geohash a lng/lat coordinate using hilbert space filling curves.
 

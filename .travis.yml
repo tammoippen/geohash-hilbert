@@ -30,6 +30,12 @@ install:
 
 script: PYTHONPATH=$PWD pytest
 
+after_success:
+  - env
+  - if [ $TRAVIS_PYTHON_VERSION == "3.6" ] && [ $WITH_CYTHON -eq 0 ]; then
+      coveralls ;
+    fi
+
 before_deploy:
   - pip install pypandoc
 
