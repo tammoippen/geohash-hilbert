@@ -14,6 +14,9 @@ def encode_int(code, bits_per_char=6):
     Returns:
         str: the encoded integer
     '''
+    if code < 0:
+        raise ValueError('Only positive ints are allowed!')
+
     if bits_per_char == 6:
         return _encode_int64(code)
     if bits_per_char == 4:
