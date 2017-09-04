@@ -5,6 +5,12 @@ from math import floor
 
 from ._int2str import decode_int, encode_int
 
+try:
+    from geohash_hilbert._hilbert_cython import hash2xy_cython, MAX_BITS, xy2hash_cython
+    CYTHON_AVAILABLE = True
+except ImportError:
+    CYTHON_AVAILABLE = False
+
 
 _LAT_INTERVAL = (-90.0, 90.0)
 _LNG_INTERVAL = (-180.0, 180.0)
@@ -40,7 +46,12 @@ def encode(lng, lat, precision=10, bits_per_char=6):
 
     x, y = _coord2int(lng, lat, dim)
 
-    return encode_int(_xy2hash(x, y, dim), bits_per_char).rjust(precision, '0')
+    if CYTHON_AVAILABLE and bits <= MAX_BITS:
+        code = xy2hash_cython(x, y, dim)
+    else:
+        code = _xy2hash(x, y, dim)
+
+    return encode_int(code, bits_per_char).rjust(precision, '0')
 
 
 def decode(code, bits_per_char=6):
@@ -87,7 +98,12 @@ def decode_exactly(code, bits_per_char=6):
     level = bits >> 1
     dim = 1 << level
 
-    x, y = _hash2xy(decode_int(code, bits_per_char), dim)
+    code_int = decode_int(code, bits_per_char)
+    if CYTHON_AVAILABLE and bits <= MAX_BITS:
+        x, y = hash2xy_cython(code_int, dim)
+    else:
+        x, y = _hash2xy(code_int, dim)
+
     lng, lat = _int2coord(x, y, dim)
     lng_err, lat_err = _lvl_error(level)  # level of hilbert curve is bits / 2
 
@@ -159,77 +175,74 @@ def _int2coord(x, y, dim):
     return lng, lat
 
 
-try:
-    from geohash_hilbert._hilbert_cython import xy2hash_cython as _xy2hash
-    from geohash_hilbert._hilbert_cython import hash2xy_cython as _hash2xy
-except:
-    # only use python versions, when cython is not available
-    def _xy2hash(x, y, dim):
-        '''Convert (x, y) to hashcode.
 
-        Based on the implementation here:
-            https://en.wikipedia.org/w/index.php?title=Hilbert_curve&oldid=797332503
+# only use python versions, when cython is not available
+def _xy2hash(x, y, dim):
+    '''Convert (x, y) to hashcode.
 
-        Pure python implementation.
+    Based on the implementation here:
+        https://en.wikipedia.org/w/index.php?title=Hilbert_curve&oldid=797332503
 
-        Parameters:
-            x: int        x value of point [0, dim) in dim x dim coord system
-            y: int        y value of point [0, dim) in dim x dim coord system
-            dim: int      Number of coding points each x, y value can take.
-                          Corresponds to 2^level of the hilbert curve.
+    Pure python implementation.
 
-        Returns:
-            int: hashcode \in [0, dim**2)
-        '''
-        d = 0
-        lvl = dim >> 1
-        while (lvl > 0):
-            rx = int((x & lvl) > 0)
-            ry = int((y & lvl) > 0)
-            d += lvl * lvl * ((3 * rx) ^ ry)
-            x, y = _rotate(lvl, x, y, rx, ry)
-            lvl >>= 1
-        return d
+    Parameters:
+        x: int        x value of point [0, dim) in dim x dim coord system
+        y: int        y value of point [0, dim) in dim x dim coord system
+        dim: int      Number of coding points each x, y value can take.
+                      Corresponds to 2^level of the hilbert curve.
 
-    def _hash2xy(hashcode, dim):
-        '''Convert hashcode to (x, y).
+    Returns:
+        int: hashcode \in [0, dim**2)
+    '''
+    d = 0
+    lvl = dim >> 1
+    while (lvl > 0):
+        rx = int((x & lvl) > 0)
+        ry = int((y & lvl) > 0)
+        d += lvl * lvl * ((3 * rx) ^ ry)
+        x, y = _rotate(lvl, x, y, rx, ry)
+        lvl >>= 1
+    return d
 
-        Based on the implementation here:
-            https://en.wikipedia.org/w/index.php?title=Hilbert_curve&oldid=797332503
+def _hash2xy(hashcode, dim):
+    '''Convert hashcode to (x, y).
 
-        Pure python implementation.
+    Based on the implementation here:
+        https://en.wikipedia.org/w/index.php?title=Hilbert_curve&oldid=797332503
 
-        Parameters:
-            hashcode: int  Hashcode to decode [0, dim**2)
-            dim: int       Number of coding points each x, y value can take.
-                           Corresponds to 2^level of the hilbert curve.
+    Pure python implementation.
 
-        Returns:
-            Tuple[int, int]: (x, y) point in dim x dim-grid system
-        '''
-        assert(hashcode <= dim * dim - 1)
-        x = y = 0
-        lvl = 1
-        while (lvl < dim):
-            rx = 1 & (hashcode >> 1)
-            ry = 1 & (hashcode ^ rx)
-            x, y = _rotate(lvl, x, y, rx, ry)
-            x += lvl * rx
-            y += lvl * ry
-            hashcode >>= 2
-            lvl <<= 1
-        return x, y
+    Parameters:
+        hashcode: int  Hashcode to decode [0, dim**2)
+        dim: int       Number of coding points each x, y value can take.
+                       Corresponds to 2^level of the hilbert curve.
 
-    def _rotate(n, x, y, rx, ry):
-        '''Rotate and flip a quadrant appropriately
+    Returns:
+        Tuple[int, int]: (x, y) point in dim x dim-grid system
+    '''
+    assert(hashcode <= dim * dim - 1)
+    x = y = 0
+    lvl = 1
+    while (lvl < dim):
+        rx = 1 & (hashcode >> 1)
+        ry = 1 & (hashcode ^ rx)
+        x, y = _rotate(lvl, x, y, rx, ry)
+        x += lvl * rx
+        y += lvl * ry
+        hashcode >>= 2
+        lvl <<= 1
+    return x, y
 
-        Based on the implementation here:
-            https://en.wikipedia.org/w/index.php?title=Hilbert_curve&oldid=797332503
+def _rotate(n, x, y, rx, ry):
+    '''Rotate and flip a quadrant appropriately
 
-        '''
-        if ry == 0:
-            if rx == 1:
-                x = n - 1 - x
-                y = n - 1 - y
-            return y, x
-        return x, y
+    Based on the implementation here:
+        https://en.wikipedia.org/w/index.php?title=Hilbert_curve&oldid=797332503
+
+    '''
+    if ry == 0:
+        if rx == 1:
+            x = n - 1 - x
+            y = n - 1 - y
+        return y, x
+    return x, y

@@ -26,14 +26,12 @@ install:
     fi
   - pip install -v -e .
   - pip install -r tests/requirements.txt
-  - python -c 'import geohash_hilbert as ghh; print(ghh._hilbert._xy2hash.__doc__)'
+  - python -c 'import geohash_hilbert as ghh; print(ghh._hilbert.CYTHON_AVAILABLE)'
 
 script: PYTHONPATH=$PWD pytest
 
 after_success:
-  - if [ $TRAVIS_PYTHON_VERSION == "3.6" ] && [ $WITH_CYTHON -eq 0 ]; then
-      coveralls ;
-    fi
+  - coveralls
 
 before_deploy:
   - pip install pypandoc

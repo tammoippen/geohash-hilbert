@@ -167,6 +167,36 @@ lvl | bits |   error       |    base4   |  base16  |  base64
 Further features
 ----------------
 
+If cython is available during install, the cython kernel extension will be installed and
+used for geohash computations with 64bit or less (timings for MBP 2016, 2.6 GHz Intel Core i7,
+Python 3.6.2, Cython 0.26.1):
+
+```python
+In [1]: import geohash_hilbert as ghh
+# Without cython ...
+In [2]: ghh._hilbert.CYTHON_AVAILABLE
+Out[2]: False
+
+In [3]: %timeit ghh.encode(6.957036, 50.941291, precision=10)
+39.4 µs ± 614 ns per loop (mean ± std. dev. of 7 runs, 10000 loops each)
+
+In [4]: %timeit ghh.encode(6.957036, 50.941291, precision=11)
+43.4 µs ± 421 ns per loop (mean ± std. dev. of 7 runs, 10000 loops each)
+```
+
+```python
+In [1]: import geohash_hilbert as ghh
+# With cython ...
+In [2]: ghh._hilbert.CYTHON_AVAILABLE
+Out[2]: True
+# almost 6x faster
+In [3]: %timeit ghh.encode(6.957036, 50.941291, precision=10)
+6.72 µs ± 57.4 ns per loop (mean ± std. dev. of 7 runs, 100000 loops each)
+# more than 64bit will be computed with pure python function.
+In [4]: %timeit ghh.encode(6.957036, 50.941291, precision=11)
+43.4 µs ± 375 ns per loop (mean ± std. dev. of 7 runs, 10000 loops each)
+```
+
 Get the actual rectangle that is encoded by a geohash, i.e. position +- errors:
 
 ```python

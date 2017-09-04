@@ -1,19 +1,21 @@
-cdef unsigned long long cy_xy2hash_cython(unsigned long long x,
-                                          unsigned long long y,
-                                          const unsigned long long dim):
-    cdef unsigned long long d = 0
-    cdef unsigned long long lvl = dim >> 1
-    cdef unsigned long long rx, ry
+
+ctypedef unsigned long long ghh_uint
+MAX_BITS = sizeof(ghh_uint) * 8
+
+cdef ghh_uint cy_xy2hash_cython(ghh_uint x, ghh_uint y, const ghh_uint dim):
+    cdef ghh_uint d = 0
+    cdef ghh_uint lvl = dim >> 1
+    cdef ghh_uint rx, ry
 
     while (lvl > 0):
-        rx = <unsigned long long>((x & lvl) > 0)
-        ry = <unsigned long long>((y & lvl) > 0)
+        rx = <ghh_uint>((x & lvl) > 0)
+        ry = <ghh_uint>((y & lvl) > 0)
         d += lvl * lvl * ((3 * rx) ^ ry)
         _rotate(lvl, &x, &y, rx, ry)
         lvl >>= 1
     return d
 
-def xy2hash_cython(x: long, y: long, dim: int) -> long:
+def xy2hash_cython(x: long, y: long, dim: long) -> long:
     '''Convert (x, y) to hashcode.
 
     Based on the implementation here:
@@ -33,12 +35,9 @@ def xy2hash_cython(x: long, y: long, dim: int) -> long:
     return cy_xy2hash_cython(x, y, dim)
 
 
-cdef void cy_hash2xy_cython(unsigned long long hashcode,
-                            const unsigned long long dim,
-                            unsigned long long* x,
-                            unsigned long long* y):
-    cdef unsigned long long lvl = 1
-    cdef unsigned long long rx, ry
+cdef void cy_hash2xy_cython(ghh_uint hashcode, const ghh_uint dim, ghh_uint* x, ghh_uint* y):
+    cdef ghh_uint lvl = 1
+    cdef ghh_uint rx, ry
     x[0] = y[0] = 0
 
     while (lvl < dim):
@@ -51,7 +50,7 @@ cdef void cy_hash2xy_cython(unsigned long long hashcode,
         lvl <<= 1
 
 
-cpdef hash2xy_cython(unsigned long long hashcode, const unsigned long long dim):
+cpdef hash2xy_cython(ghh_uint hashcode, const ghh_uint dim):
     '''Convert hashcode to (x, y).
 
     Based on the implementation here:
@@ -75,11 +74,7 @@ cpdef hash2xy_cython(unsigned long long hashcode, const unsigned long long dim):
     return x, y
 
 
-cdef void _rotate(unsigned long long n,
-                  unsigned long long* x,
-                  unsigned long long* y,
-                  unsigned long long rx,
-                  unsigned long long ry):
+cdef void _rotate(ghh_uint n, ghh_uint* x, ghh_uint* y, ghh_uint rx, ghh_uint ry):
     if ry == 0:
         if rx == 1:
             x[0] = n - 1 - x[0]
