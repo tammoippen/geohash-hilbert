@@ -122,8 +122,7 @@ All keep the same ordering as their integer value by lexicographical order:
 **Note**: Do not mix geohashes from the original `geohash` and this, and do not mix base4, base16 and base64
 geohash representations. Decide for one representation and then stick to it.
 
-The different encodings also give a more fine grain control of the actual encoding
-precision and the geohash size:
+The different encodings also give a more fine grain control of the actual encoding precision and the geohash size (maximum lng/lat error around equator):
 
 ```
 lvl | bits |   error       |    base4   |  base16  |  base64
