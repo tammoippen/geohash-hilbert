@@ -28,7 +28,7 @@ def test_neighbours(bpc, prec):
         directions = {'north', 'north-east', 'north-west', 'east',
                       'west', 'south', 'south-east', 'south-west'}
 
-        assert directions == neighbours.keys()
+        assert directions == set(neighbours.keys())
 
         # no duplicates (depends on level)
         assert len(neighbours) == len(set(neighbours.values()))
