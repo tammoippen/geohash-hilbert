@@ -29,7 +29,7 @@ def neighbours(code, bits_per_char=6):
 
     south = lat - 2 * lat_err
     if south < -90:
-        north += 180
+        south += 180
 
     east = lng + 2 * lng_err
     if east > 180:
@@ -87,9 +87,9 @@ def rectangle(code, bits_per_char=6):
             type='Polygon',
             coordinates=[[
                 (lng - lng_err, lat - lat_err),
-                (lng - lng_err, lat + lat_err),
-                (lng + lng_err, lat + lat_err),
                 (lng + lng_err, lat - lat_err),
+                (lng + lng_err, lat + lat_err),
+                (lng - lng_err, lat + lat_err),
                 (lng - lng_err, lat - lat_err),
             ]]
         )
