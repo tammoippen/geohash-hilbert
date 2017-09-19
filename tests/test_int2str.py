@@ -27,6 +27,11 @@ def test_invalid():
             encode_int(-1, bpc)
 
 
+def test_empty():
+    for bpc in (2, 4, 6):
+        assert 0 == decode_int('', bpc)
+
+
 @pytest.mark.parametrize('bpc', (2, 4, 6))
 def test_randoms(bpc):
     prev_code = None
