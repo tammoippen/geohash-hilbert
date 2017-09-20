@@ -27,6 +27,7 @@ setup(
     author_email='tammo.ippen@posteo.de',
     description='Geohash a lng/lat coordinate using the hilbert curve.',
     long_description=long_description,
+    license='MIT',
     url='https://github.com/tammoippen/geohash-hilbert',
     download_url='https://github.com/tammoippen/geohash-hilbert/archive/v{}.tar.gz'.format(version),
     keywords=['geohash', 'hilbert', 'space filling curve', 'geometry'],
