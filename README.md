@@ -4,6 +4,9 @@ geohash-hilbert
 [![Build Status](https://travis-ci.org/tammoippen/geohash-hilbert.svg?branch=master)](https://travis-ci.org/tammoippen/geohash-hilbert)
 [![Coverage Status](https://coveralls.io/repos/github/tammoippen/geohash-hilbert/badge.svg?branch=master)](https://coveralls.io/github/tammoippen/geohash-hilbert?branch=master)
 [![Tested Python Versions](https://img.shields.io/badge/python-2.7%2C%203.5%2C%203.6%2C%20nightly-brightgreen.svg)](https://img.shields.io/badge/python-2.7%2C%203.5%2C%203.6%2C%20nightly-brightgreen.svg)
+[![PyPi downloads/month](https://img.shields.io/pypi/dm/geohash-hilbert.svg)](https://img.shields.io/pypi/dm/geohash-hilbert.svg)
+[![PyPi version](https://img.shields.io/pypi/v/geohash-hilbert.svg)](https://img.shields.io/pypi/v/geohash-hilbert.svg)
+[![PyPi license](https://img.shields.io/pypi/l/geohash-hilbert.svg)](https://img.shields.io/pypi/l/geohash-hilbert.svg)
 
 Geohash a lng/lat coordinate using hilbert space filling curves.
 
