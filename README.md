@@ -5,7 +5,6 @@ geohash-hilbert
 [![Coverage Status](https://coveralls.io/repos/github/tammoippen/geohash-hilbert/badge.svg?branch=master)](https://coveralls.io/github/tammoippen/geohash-hilbert?branch=master)
 [![Tested CPython Versions](https://img.shields.io/badge/cpython-2.7%2C%203.5%2C%203.6%2C%20nightly-brightgreen.svg)](https://img.shields.io/badge/cpython-2.7%2C%203.5%2C%203.6%2C%20nightly-brightgreen.svg)
 [![Tested PyPy Versions](https://img.shields.io/badge/pypy-2.7--5.8.0%2C%203.5--5.8.0-brightgreen.svg)](https://img.shields.io/badge/pypy-2.7--5.8.0%2C%203.5--5.8.0-brightgreen.svg)
-[![PyPi downloads/month](https://img.shields.io/pypi/dm/geohash-hilbert.svg)](https://pypi.python.org/pypi/geohash-hilbert)
 [![PyPi version](https://img.shields.io/pypi/v/geohash-hilbert.svg)](https://pypi.python.org/pypi/geohash-hilbert)
 [![PyPi license](https://img.shields.io/pypi/l/geohash-hilbert.svg)](https://pypi.python.org/pypi/geohash-hilbert)
 
