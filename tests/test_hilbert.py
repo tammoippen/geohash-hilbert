@@ -15,6 +15,12 @@ def rand_lat():
     return random() * 180 - 90
 
 
+@pytest.mark.parametrize('bpc', (2, 4, 6))
+def test_decode_empty(bpc):
+    assert (0, 0) == hilbert.decode('', bits_per_char=bpc)
+    assert (0, 0, 180, 90) == hilbert.decode_exactly('', bits_per_char=bpc)
+
+
 @pytest.mark.parametrize('prec', range(1, 15))
 @pytest.mark.parametrize('bpc', (2, 4, 6))
 def test_encode_decode(bpc, prec):

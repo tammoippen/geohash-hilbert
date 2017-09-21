@@ -92,7 +92,9 @@ def decode(code, bits_per_char=6):
         Tuple[float, float]:  (lng, lat) coordinate for the geohash.
     '''
     assert bits_per_char in (2, 4, 6)
-    assert len(code) > 0
+
+    if len(code) == 0:
+        return 0., 0.
 
     lng, lat, _lng_err, _lat_err = decode_exactly(code, bits_per_char)
     return lng, lat
@@ -114,7 +116,9 @@ def decode_exactly(code, bits_per_char=6):
         Tuple[float, float, float, float]:  (lng, lat, lng-error, lat-error) coordinate for the geohash.
     '''
     assert bits_per_char in (2, 4, 6)
-    assert len(code) > 0
+
+    if len(code) == 0:
+        return 0., 0., _LNG_INTERVAL[1], _LAT_INTERVAL[1]
 
     bits = len(code) * bits_per_char
     level = bits >> 1
