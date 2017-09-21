@@ -16,7 +16,7 @@ try:
 except(IOError, ImportError):
     long_description = open('README.md').read()
 
-version = '1.0'
+version = '1.1'
 
 setup(
     name='geohash-hilbert',
