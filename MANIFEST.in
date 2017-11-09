@@ -1,4 +1,4 @@
-include README.md LICENSE.txt .travis.yml
+include README.md README.rst LICENSE.txt .travis.yml
 recursive-include geohash_hilbert *.pyx *.py
 recursive-include tests *.py requirements.txt
 recursive-exclude geohash_hilbert *.so *.c *.pyc

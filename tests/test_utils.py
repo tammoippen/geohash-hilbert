@@ -3,8 +3,8 @@ from __future__ import absolute_import, division, print_function, unicode_litera
 
 from random import random
 
-from geohash_hilbert import decode_exactly, encode
 from geohash_hilbert import _utils as utils
+from geohash_hilbert import decode_exactly, encode
 from geohash_hilbert._int2str import decode_int
 import pytest
 

@@ -11,9 +11,8 @@ except ImportError:
     pass
 
 try:
-    import pypandoc
-    long_description = pypandoc.convert('README.md', 'rst')
-except(IOError, ImportError):
+    long_description = open('README.rst').read()
+except IOError:
     long_description = open('README.md').read()
 
 version = '1.1'
