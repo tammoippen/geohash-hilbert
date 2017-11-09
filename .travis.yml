@@ -25,9 +25,9 @@ addons:
 install:
   - pip install pipenv
   - if [ $WITH_CYTHON -eq 1 ]; then
-      pipenv install cython ;
+      pipenv install cython --skip-lock ;
     fi
-  - pipenv install --dev
+  - pipenv install --dev --skip-lock
   - pipenv run pip install -e .
   - pipenv run pip install pytest-benchmark  # somehow not found with python2
   - pipenv run python -c 'import geohash_hilbert as ghh; print(ghh._hilbert.CYTHON_AVAILABLE)'
