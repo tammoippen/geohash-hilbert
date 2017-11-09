@@ -23,14 +23,15 @@ addons:
       - pandoc
 
 install:
+  - pip install pipenv
   - if [ $WITH_CYTHON -eq 1 ]; then
-      pip install cython ;
+      pipenv install cython ;
     fi
-  - pip install -v -e .
-  - pip install -r tests/requirements.txt
-  - python -c 'import geohash_hilbert as ghh; print(ghh._hilbert.CYTHON_AVAILABLE)'
+  - pipenv install --dev
+  - pipenv run pip install -e .
+  - pipenv run python -c 'import geohash_hilbert as ghh; print(ghh._hilbert.CYTHON_AVAILABLE)'
 
-script: PYTHONPATH=$PWD pytest
+script: PYTHONPATH=$PWD pipenv run pytest
 
 after_success:
   - coveralls
