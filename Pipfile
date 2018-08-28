@@ -1,15 +1,13 @@
 [[source]]
-
 url = "https://pypi.python.org/simple"
 verify_ssl = true
 name = "pypi"
 
-
 [packages]
-
+geohash-hilbert = {editable = true, path = "."}
+pytest-benchmark = "*"
 
 [dev-packages]
-
 "flake8-import-order" = "*"
 "pep8-naming" = "*"
 pytest = "*"

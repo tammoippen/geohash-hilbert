@@ -8,9 +8,10 @@ python:
   - "2.7"
   - "3.5"
   - "3.6"
+  - "3.7"
   - "nightly"
-  - "pypy2.7-5.8.0"
-  - "pypy3.5-5.8.0"
+  - "pypy2.7"
+  - "pypy3.5"
 
 env:
   - WITH_CYTHON=1
@@ -28,11 +29,11 @@ install:
       pipenv install cython --skip-lock ;
     fi
   - pipenv install --dev --skip-lock
-  - pipenv run pip install -e .
-  - pipenv run pip install pytest-benchmark  # somehow not found with python2
+  - pipenv install -e . --skip-lock
+  - pipenv install pytest-benchmark --skip-lock # somehow not found with python2
   - pipenv run python -c 'import geohash_hilbert as ghh; print(ghh._hilbert.CYTHON_AVAILABLE)'
 
-script: PYTHONPATH=$PWD pipenv run pytest
+script: pipenv run pytest
 
 after_success:
   - coveralls
@@ -50,5 +51,5 @@ deploy:
   on:
     branch: master
     tags: true
-    python: "3.6"
+    python: "3.7"
     condition: $WITH_CYTHON -eq 1
