@@ -39,7 +39,7 @@ _LNG_INTERVAL = (-180.0, 180.0)
 
 
 def encode(lng, lat, precision=10, bits_per_char=6):
-    '''Encode a lng/lat position as a geohash using a hilbert curve
+    """Encode a lng/lat position as a geohash using a hilbert curve
 
     This function encodes a lng/lat coordinate to a geohash of length `precision`
     on a corresponding a hilbert curve. Each character encodes `bits_per_char` bits
@@ -56,7 +56,7 @@ def encode(lng, lat, precision=10, bits_per_char=6):
 
     Returns:
         str: geohash for lng/lat of length `precision`
-    '''
+    """
     assert _LNG_INTERVAL[0] <= lng <= _LNG_INTERVAL[1]
     assert _LAT_INTERVAL[0] <= lat <= _LAT_INTERVAL[1]
     assert precision > 0
@@ -77,7 +77,7 @@ def encode(lng, lat, precision=10, bits_per_char=6):
 
 
 def decode(code, bits_per_char=6):
-    '''Decode a geohash on a hilbert curve as a lng/lat position
+    """Decode a geohash on a hilbert curve as a lng/lat position
 
     Decodes the geohash `code` as a lng/lat position. It assumes, that
     the length of `code` corresponds to the precision! And that each character
@@ -90,7 +90,7 @@ def decode(code, bits_per_char=6):
 
     Returns:
         Tuple[float, float]:  (lng, lat) coordinate for the geohash.
-    '''
+    """
     assert bits_per_char in (2, 4, 6)
 
     if len(code) == 0:
@@ -101,7 +101,7 @@ def decode(code, bits_per_char=6):
 
 
 def decode_exactly(code, bits_per_char=6):
-    '''Decode a geohash on a hilbert curve as a lng/lat position with error-margins
+    """Decode a geohash on a hilbert curve as a lng/lat position with error-margins
 
     Decodes the geohash `code` as a lng/lat position with error-margins. It assumes,
     that the length of `code` corresponds to the precision! And that each character
@@ -114,7 +114,7 @@ def decode_exactly(code, bits_per_char=6):
 
     Returns:
         Tuple[float, float, float, float]:  (lng, lat, lng-error, lat-error) coordinate for the geohash.
-    '''
+    """
     assert bits_per_char in (2, 4, 6)
 
     if len(code) == 0:
@@ -137,7 +137,7 @@ def decode_exactly(code, bits_per_char=6):
 
 
 def _lvl_error(level):
-    '''Get the lng/lat error for the hilbert curve with the given level
+    """Get the lng/lat error for the hilbert curve with the given level
 
     On every level, the error of the hilbert curve is halved, e.g.
     - level 0 has lng error of +-180 (only one coding point is available: (0, 0))
@@ -149,13 +149,13 @@ def _lvl_error(level):
 
     Returns:
         Tuple[float, float]: (lng-error, lat-error) for the given level
-    '''
+    """
     error = 1 / (1 << level)
     return 180 * error, 90 * error
 
 
 def _coord2int(lng, lat, dim):
-    '''Convert lon, lat values into a dim x dim-grid coordinate system.
+    """Convert lon, lat values into a dim x dim-grid coordinate system.
 
     Parameters:
         lng: float    Longitude value of coordinate (-180.0, 180.0); corresponds to X axis
@@ -168,7 +168,7 @@ def _coord2int(lng, lat, dim):
             Lower left corner of corresponding dim x dim-grid box
               x      x value of point [0, dim); corresponds to longitude
               y      y value of point [0, dim); corresponds to latitude
-    '''
+    """
     assert dim >= 1
 
     lat_y = (lat + _LAT_INTERVAL[1]) / 180.0 * dim   # [0 ... dim)
@@ -178,7 +178,7 @@ def _coord2int(lng, lat, dim):
 
 
 def _int2coord(x, y, dim):
-    '''Convert x, y values in dim x dim-grid coordinate system into lng, lat values.
+    """Convert x, y values in dim x dim-grid coordinate system into lng, lat values.
 
     Parameters:
         x: int        x value of point [0, dim); corresponds to longitude
@@ -190,7 +190,7 @@ def _int2coord(x, y, dim):
         Tuple[float, float]: (lng, lat)
             lng    longitude value of coordinate [-180.0, 180.0]; corresponds to X axis
             lat    latitude value of coordinate [-90.0, 90.0]; corresponds to Y axis
-    '''
+    """
     assert dim >= 1
     assert x < dim
     assert y < dim
@@ -203,7 +203,7 @@ def _int2coord(x, y, dim):
 
 # only use python versions, when cython is not available
 def _xy2hash(x, y, dim):
-    '''Convert (x, y) to hashcode.
+    """Convert (x, y) to hashcode.
 
     Based on the implementation here:
         https://en.wikipedia.org/w/index.php?title=Hilbert_curve&oldid=797332503
@@ -218,7 +218,7 @@ def _xy2hash(x, y, dim):
 
     Returns:
         int: hashcode \in [0, dim**2)
-    '''
+    """
     d = 0
     lvl = dim >> 1
     while (lvl > 0):
@@ -231,7 +231,7 @@ def _xy2hash(x, y, dim):
 
 
 def _hash2xy(hashcode, dim):
-    '''Convert hashcode to (x, y).
+    """Convert hashcode to (x, y).
 
     Based on the implementation here:
         https://en.wikipedia.org/w/index.php?title=Hilbert_curve&oldid=797332503
@@ -245,7 +245,7 @@ def _hash2xy(hashcode, dim):
 
     Returns:
         Tuple[int, int]: (x, y) point in dim x dim-grid system
-    '''
+    """
     assert(hashcode <= dim * dim - 1)
     x = y = 0
     lvl = 1
@@ -261,12 +261,12 @@ def _hash2xy(hashcode, dim):
 
 
 def _rotate(n, x, y, rx, ry):
-    '''Rotate and flip a quadrant appropriately
+    """Rotate and flip a quadrant appropriately
 
     Based on the implementation here:
         https://en.wikipedia.org/w/index.php?title=Hilbert_curve&oldid=797332503
 
-    '''
+    """
     if ry == 0:
         if rx == 1:
             x = n - 1 - x

@@ -20,7 +20,7 @@ def rand_lat():
 @pytest.mark.parametrize('bpc', (2, 4, 6))
 @pytest.mark.parametrize('prec', range(2, 7))
 def test_neighbours(bpc, prec):
-    for i_ in range(100):
+    for _i in range(100):
         code = encode(rand_lng(), rand_lat(), bits_per_char=bpc, precision=prec)
         lng, lat, lng_err, lat_err = decode_exactly(code, bits_per_char=bpc)
         neighbours = utils.neighbours(code, bpc)
@@ -33,7 +33,7 @@ def test_neighbours(bpc, prec):
         # no duplicates (depends on level)
         assert len(neighbours) == len(set(neighbours.values()))
 
-        for k, v in neighbours.items():
+        for v in neighbours.values():
             n_lng, n_lat, n_lng_err, n_lat_err = decode_exactly(v, bits_per_char=bpc)
 
             # same level
@@ -64,14 +64,14 @@ def test_rectangle(bpc, prec):
     assert rect['geometry']['type'] == 'Polygon'
     assert rect['bbox'] == (lng - lng_err, lat - lat_err,
                             lng + lng_err, lat + lat_err)
-    assert rect['properties'] == dict(
-        code=code,
-        lng=lng,
-        lat=lat,
-        lng_err=lng_err,
-        lat_err=lat_err,
-        bits_per_char=bpc,
-    )
+    assert rect['properties'] == {
+        'code': code,
+        'lng': lng,
+        'lat': lat,
+        'lng_err': lng_err,
+        'lat_err': lat_err,
+        'bits_per_char': bpc,
+    }
 
     coords = rect['geometry']['coordinates']
     assert 1 == len(coords)  # one external ring
