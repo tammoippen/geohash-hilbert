@@ -32,7 +32,7 @@ install:
   - poetry install
   - if [ $WITH_CYTHON -eq 1 ]; then
       pip install cython ;
-      cythonize -i geohash_hilbert/*.pyx
+      cythonize -i geohash_hilbert/*.pyx ;
     fi
   - poetry show
   - poetry run python -c 'import geohash_hilbert as ghh; print(ghh._hilbert.CYTHON_AVAILABLE)'
