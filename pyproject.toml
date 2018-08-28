@@ -39,7 +39,6 @@ python = "~2.7 || ^3.5"
 
 flake8 = "^3.5.0"
 flake8-import-order = "^0.18"
-# flake8-bugbear = { python = "^3.5", version = "^18.8" }
 flake8-commas = "^2.0.0"
 flake8-comprehensions = "^1.4.1"
 flake8-pep3101 = "^1.2.1"
