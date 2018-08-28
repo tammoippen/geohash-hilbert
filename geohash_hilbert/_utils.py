@@ -28,7 +28,7 @@ from ._int2str import encode_int
 
 
 def neighbours(code, bits_per_char=6):
-    '''Get the neighbouring geohashes for `code`.
+    """Get the neighbouring geohashes for `code`.
 
     Look for the north, north-east, east, south-east, south, south-west, west,
     north-west neighbours. If you are at the edge of the grid (lng \in (-180, 180),
@@ -41,7 +41,7 @@ def neighbours(code, bits_per_char=6):
     Returns:
         dict: geohashes in the neighborhood of `code`. Keys are 'north', 'north-east',
             'east', 'south-east', 'south', 'south-west', 'west', 'north-west'.
-    '''
+    """
     lng, lat, lng_err, lat_err = decode_exactly(code, bits_per_char)
     precision = len(code)
 
@@ -74,7 +74,7 @@ def neighbours(code, bits_per_char=6):
 
 
 def rectangle(code, bits_per_char=6):
-    '''Builds a (geojson) rectangle from `code`
+    """Builds a (geojson) rectangle from `code`
 
     The center of the rectangle decodes as the lng/lat for code and
     the rectangle corresponds to the error-margin, i.e. every lng/lat
@@ -86,40 +86,40 @@ def rectangle(code, bits_per_char=6):
 
     Returns:
         dict: geojson `Feature` containing the rectangle as a `Polygon`.
-    '''
+    """
     lng, lat, lng_err, lat_err = decode_exactly(code, bits_per_char)
 
-    return dict(
-        type='Feature',
-        properties=dict(
-            code=code,
-            lng=lng,
-            lat=lat,
-            lng_err=lng_err,
-            lat_err=lat_err,
-            bits_per_char=bits_per_char,
-        ),
-        bbox=(
+    return {
+        'type': 'Feature',
+        'properties': {
+            'code': code,
+            'lng': lng,
+            'lat': lat,
+            'lng_err': lng_err,
+            'lat_err': lat_err,
+            'bits_per_char': bits_per_char,
+        },
+        'bbox': (
             lng - lng_err,  # bottom left
             lat - lat_err,
             lng + lng_err,  # top right
             lat + lat_err,
         ),
-        geometry=dict(
-            type='Polygon',
-            coordinates=[[
+        'geometry': {
+            'type': 'Polygon',
+            'coordinates': [[
                 (lng - lng_err, lat - lat_err),
                 (lng + lng_err, lat - lat_err),
                 (lng + lng_err, lat + lat_err),
                 (lng - lng_err, lat + lat_err),
                 (lng - lng_err, lat - lat_err),
-            ]]
-        )
-    )
+            ]],
+        },
+    }
 
 
 def hilbert_curve(precision, bits_per_char=6):
-    '''Build the (geojson) `LineString` of the used hilbert-curve
+    """Build the (geojson) `LineString` of the used hilbert-curve
 
     Builds the `LineString` of the used hilbert-curve given the `precision` and
     the `bits_per_char`. The number of bits to encode the geohash is equal to
@@ -135,7 +135,7 @@ def hilbert_curve(precision, bits_per_char=6):
 
     Returns:
         dict: geojson `Feature` containing the hilbert curve as a `LineString`.
-    '''
+    """
     bits = precision * bits_per_char
 
     coords = []
@@ -143,11 +143,11 @@ def hilbert_curve(precision, bits_per_char=6):
         code = encode_int(i, bits_per_char).rjust(precision, '0')
         coords += [decode(code, bits_per_char)]
 
-    return dict(
-        type='Feature',
-        properties=dict(),
-        geometry=dict(
-            type='LineString',
-            coordinates=coords
-        )
-    )
+    return {
+        'type': 'Feature',
+        'properties': {},
+        'geometry': {
+            'type': 'LineString',
+            'coordinates': coords,
+        },
+    }

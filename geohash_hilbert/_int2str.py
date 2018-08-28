@@ -25,7 +25,7 @@ from __future__ import absolute_import, division, print_function, unicode_litera
 
 
 def encode_int(code, bits_per_char=6):
-    '''Encode int into a string preserving order
+    """Encode int into a string preserving order
 
     It is using 2, 4 or 6 bits per coding character (default 6).
 
@@ -35,7 +35,7 @@ def encode_int(code, bits_per_char=6):
 
     Returns:
         str: the encoded integer
-    '''
+    """
     if code < 0:
         raise ValueError('Only positive ints are allowed!')
 
@@ -50,7 +50,7 @@ def encode_int(code, bits_per_char=6):
 
 
 def decode_int(tag, bits_per_char=6):
-    '''Decode string into int assuming encoding with `encode_int()`
+    """Decode string into int assuming encoding with `encode_int()`
 
     It is using 2, 4 or 6 bits per coding character (default 6).
 
@@ -60,7 +60,7 @@ def decode_int(tag, bits_per_char=6):
 
     Returns:
         int: the decoded string
-    '''
+    """
     if bits_per_char == 6:
         return _decode_int64(tag)
     if bits_per_char == 4:

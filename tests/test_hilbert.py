@@ -89,7 +89,7 @@ def test_coord2int():
     assert (2, 2) == hilbert._coord2int(180, 90, 3)
 
     for dim in range(3, 200):
-        for i in range(100):
+        for _i in range(100):
             x, y = hilbert._coord2int(rand_lng(), rand_lat(), dim)
             assert 0 <= x < dim
             assert 0 <= y < dim
