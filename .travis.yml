@@ -28,9 +28,11 @@ install:
   - if [ $WITH_CYTHON -eq 1 ]; then
       pipenv install cython --skip-lock ;
     fi
+  - pip freeze
   - pipenv install --dev --skip-lock
   - pipenv install -e . --skip-lock
   - pipenv install pytest-benchmark --skip-lock # somehow not found with python2
+  - pipenv graph
   - pipenv run python -c 'import geohash_hilbert as ghh; print(ghh._hilbert.CYTHON_AVAILABLE)'
 
 script: pipenv run pytest
