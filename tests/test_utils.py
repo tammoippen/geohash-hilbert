@@ -25,10 +25,13 @@ def test_neighbours(bpc, prec):
         lng, lat, lng_err, lat_err = decode_exactly(code, bits_per_char=bpc)
         neighbours = utils.neighbours(code, bpc)
 
-        directions = {'north', 'north-east', 'north-west', 'east',
-                      'west', 'south', 'south-east', 'south-west'}
+        expected_directions = {'east', 'west'}
+        if lat + lat_err < 90:  # more earth to the north
+            expected_directions.update({'north', 'north-west', 'north-east'})
+        if lat - lat_err > -90:  # more earth to the south
+            expected_directions.update({'south', 'south-west', 'south-east'})
 
-        assert directions == set(neighbours.keys())
+        assert expected_directions == set(neighbours.keys())
 
         # no duplicates (depends on level)
         assert len(neighbours) == len(set(neighbours.values()))
