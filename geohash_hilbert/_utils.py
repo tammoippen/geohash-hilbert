@@ -80,7 +80,7 @@ def neighbours(code, bits_per_char=6):
             'south-east': encode(east, south, precision, bits_per_char),  # noqa: E241
             'south-west': encode(west, south, precision, bits_per_char),  # noqa: E241
         })
-    
+
     return neighbours_dict
 
 
