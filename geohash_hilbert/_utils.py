@@ -31,27 +31,28 @@ def neighbours(code, bits_per_char=6):
     """Get the neighbouring geohashes for `code`.
 
     Look for the north, north-east, east, south-east, south, south-west, west,
-    north-west neighbours. If you are at the edge of the grid (lng \in (-180, 180),
-    lat \in (-90, 90)), then it wraps around the glob and gets the corresponding neighbor.
+    north-west neighbours. If you are at the east/west edge of the grid
+    (lng ∈ (-180, 180)), then it wraps around the globe and gets the corresponding
+    neighbor.
 
     Parameters:
         code: str           The geohash at the center.
         bits_per_char: int  The number of bits per coding character.
 
     Returns:
-        dict: geohashes in the neighborhood of `code`. Keys are 'north', 'north-east',
-            'east', 'south-east', 'south', 'south-west', 'west', 'north-west'.
+        dict: geohashes in the neighborhood of `code`. Possible keys are 'north',
+            'north-east', 'east', 'south-east', 'south', 'south-west',
+            'west', 'north-west'. If the input code covers the north pole, then
+            keys 'north', 'north-east', and 'north-west' are not present, and if
+            the input code covers the south pole then keys 'south', 'south-west',
+            and 'south-east' are not present.
     """
     lng, lat, lng_err, lat_err = decode_exactly(code, bits_per_char)
     precision = len(code)
 
     north = lat + 2 * lat_err
-    if north > 90:
-        north -= 180
 
     south = lat - 2 * lat_err
-    if south < -90:
-        south += 180
 
     east = lng + 2 * lng_err
     if east > 180:
@@ -61,16 +62,26 @@ def neighbours(code, bits_per_char=6):
     if west < -180:
         west += 360
 
-    return {
-        'north':      encode(lng,  north, precision, bits_per_char),  # noqa: E241
-        'north-east': encode(east, north, precision, bits_per_char),  # noqa: E241
-        'north-west': encode(west, north, precision, bits_per_char),  # noqa: E241
-        'east':       encode(east, lat,   precision, bits_per_char),  # noqa: E241
-        'west':       encode(west, lat,   precision, bits_per_char),  # noqa: E241
-        'south':      encode(lng,  south, precision, bits_per_char),  # noqa: E241
-        'south-east': encode(east, south, precision, bits_per_char),  # noqa: E241
-        'south-west': encode(west, south, precision, bits_per_char),  # noqa: E241
+    neighbours_dict = {
+        'east': encode(east, lat,   precision, bits_per_char),  # noqa: E241
+        'west': encode(west, lat,   precision, bits_per_char),  # noqa: E241
     }
+
+    if north <= 90:  # input cell not already at the north pole
+        neighbours_dict.update({
+            'north':      encode(lng,  north, precision, bits_per_char),  # noqa: E241
+            'north-east': encode(east, north, precision, bits_per_char),  # noqa: E241
+            'north-west': encode(west, north, precision, bits_per_char),  # noqa: E241
+        })
+
+    if south >= -90:  # input cell not already at the south pole
+        neighbours_dict.update({
+            'south':      encode(lng,  south, precision, bits_per_char),  # noqa: E241
+            'south-east': encode(east, south, precision, bits_per_char),  # noqa: E241
+            'south-west': encode(west, south, precision, bits_per_char),  # noqa: E241
+        })
+
+    return neighbours_dict
 
 
 def rectangle(code, bits_per_char=6):
