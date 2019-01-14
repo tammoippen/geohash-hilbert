@@ -32,7 +32,7 @@ def neighbours(code, bits_per_char=6):
 
     Look for the north, north-east, east, south-east, south, south-west, west,
     north-west neighbours. If you are at the east/west edge of the grid
-    (lng \in (-180, 180)), then it wraps around the globe and gets the corresponding
+    (lng ∈ (-180, 180)), then it wraps around the globe and gets the corresponding
     neighbor.
 
     Parameters:
