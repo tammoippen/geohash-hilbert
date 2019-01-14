@@ -16,3 +16,6 @@ dist/
 README.rst
 Pipfile.lock
 pyproject.lock
+poetry.lock
+.hypothesis/
+.vscode/
