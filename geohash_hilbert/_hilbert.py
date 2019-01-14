@@ -217,7 +217,7 @@ def _xy2hash(x, y, dim):
                       Corresponds to 2^level of the hilbert curve.
 
     Returns:
-        int: hashcode \in [0, dim**2)
+        int: hashcode  ∈ [0, dim**2)
     """
     d = 0
     lvl = dim >> 1

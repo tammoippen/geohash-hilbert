@@ -52,7 +52,7 @@ def xy2hash_cython(x: long, y: long, dim: long) -> long:
                       Corresponds to 2^level of the hilbert curve.
 
     Returns:
-        int: hashcode \in [0, dim**2)
+        int: hashcode  ∈ [0, dim**2)
     '''
     return cy_xy2hash_cython(x, y, dim)
 
