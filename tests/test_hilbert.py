@@ -3,8 +3,9 @@ from __future__ import absolute_import, division, print_function, unicode_litera
 
 from random import random
 
-from geohash_hilbert import _hilbert as hilbert
 import pytest
+
+from geohash_hilbert import _hilbert as hilbert
 
 
 def rand_lng():

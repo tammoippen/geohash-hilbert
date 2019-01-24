@@ -3,9 +3,10 @@ from __future__ import absolute_import, division, print_function, unicode_litera
 
 from random import randint
 
-from geohash_hilbert._int2str import decode_int, encode_int
 import pytest
 import six
+
+from geohash_hilbert._int2str import decode_int, encode_int
 
 
 def test_parameters():
