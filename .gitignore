@@ -19,3 +19,5 @@ pyproject.lock
 poetry.lock
 .hypothesis/
 .vscode/
+pip-wheel-metadata/
+.benchmarks/
