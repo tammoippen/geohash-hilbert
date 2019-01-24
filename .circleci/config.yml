@@ -174,7 +174,7 @@ jobs:
 
   deploy_job:
     docker:
-      - image: circleci/python:3.6.7
+      - image: circleci/python:3.6.8
     description: "Deploy geohash-hilbert to pypi."
     steps:
       - checkout
