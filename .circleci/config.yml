@@ -108,14 +108,14 @@ jobs:
   test_2_7_pypy:
     executor:
         name: python
-        image: "pypy:2-6.0.0"
+        image: "pypy:2-7.3.0"
         with_cython: 0
     steps:
       - tester
   test_2_7_pypy_cython:
     executor:
         name: python
-        image: "pypy:2-6.0.0"
+        image: "pypy:2-7.3.0"
         with_cython: 1
     steps:
       - tester
@@ -133,52 +133,66 @@ jobs:
       with_cython: 1
     steps:
       - tester
-  test_3_5_pypy:
+  test_3_6_pypy:
     executor:
       name: python
-      image: "pypy:3-6.0.0"
+      image: "pypy:3-7.3.0"
       with_cython: 0
     steps:
       - tester
-  test_3_5_pypy_cython:
+  test_3_6_pypy_cython:
     executor:
       name: python
-      image: "pypy:3-6.0.0"
+      image: "pypy:3-7.3.0"
       with_cython: 1
     steps:
       - tester
   test_3_6:
     executor:
       name: python
-      image: "circleci/python:3.6.8"
+      image: "circleci/python:3.6"
       with_cython: 0
     steps:
       - tester
   test_3_6_cython:
     executor:
       name: python
-      image: "circleci/python:3.6.8"
+      image: "circleci/python:3.6"
       with_cython: 1
     steps:
       - tester
   test_3_7:
     executor:
       name: python
-      image: "circleci/python:3.7.2"
+      image: "circleci/python:3.7"
       with_cython: 0
     steps:
       - tester
   test_3_7_cython:
     executor:
       name: python
-      image: "circleci/python:3.7.2"
+      image: "circleci/python:3.7"
+      with_cython: 1
+    steps:
+      - tester
+  test_3_8:
+    executor:
+      name: python
+      image: "circleci/python:3.8"
+      with_cython: 0
+    steps:
+      - tester
+  test_3_8_cython:
+    executor:
+      name: python
+      image: "circleci/python:3.8"
       with_cython: 1
     steps:
       - tester
 
   deploy_job:
     docker:
-      - image: circleci/python:3.6.8
+      - image: circleci/python:3.6
     description: "Deploy geohash-hilbert to pypi."
     steps:
       - checkout
@@ -224,11 +238,11 @@ workflows:
           filters:
             tags:
               only: /.*/
-      - test_3_5_pypy:
+      - test_3_6_pypy:
           filters:
             tags:
               only: /.*/
-      - test_3_5_pypy_cython:
+      - test_3_6_pypy_cython:
           filters:
             tags:
               only: /.*/
@@ -248,6 +262,14 @@ workflows:
           filters:
             tags:
               only: /.*/
+      - test_3_8:
+          filters:
+            tags:
+              only: /.*/
+      - test_3_8_cython:
+          filters:
+            tags:
+              only: /.*/
       - deploy_job:
           requires:
             - test_2_7
@@ -256,12 +278,14 @@ workflows:
             - test_2_7_pypy_cython
             - test_3_5
             - test_3_5_cython
-            - test_3_5_pypy
+            - test_3_6_pypy
             - test_3_5_pypy_cython
             - test_3_6
             - test_3_6_cython
             - test_3_7
             - test_3_7_cython
+            - test_3_8
+            - test_3_8_cython
           filters:
             branches:
               ignore: /.*/
