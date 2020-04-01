@@ -57,7 +57,11 @@ commands:
 
       - run:
           name: Build sdist
-          command: poetry build -vvv -f sdist
+          command: |
+            poetry build -vvv -f sdist
+            for f in `ls dist/`; do
+              zcat dist/$f | tar --wildcards --delete "*/pyproject.toml" | gzip > dist/x$f ; mv dist/x$f dist/$f
+            done
 
       - store_artifacts:
           path: ~/app/dist
