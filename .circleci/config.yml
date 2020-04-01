@@ -204,10 +204,13 @@ jobs:
             source $BASH_ENV
 
       - run:
-          name: Pre-install
+          name: Publish
           command: |
             pip install --user poetry
             poetry build -vvv -f sdist
+            for f in `ls dist/`; do
+              zcat dist/$f | tar --wildcards --delete "*/pyproject.toml" | gzip > dist/x$f ; mv dist/x$f dist/$f
+            done
             poetry publish -vvv -n -u tammoippen -p $PYPI_PASS
 
 workflows:
