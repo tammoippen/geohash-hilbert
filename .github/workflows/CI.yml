@@ -86,6 +86,6 @@ jobs:
       - uses: codecov/codecov-action@v4
         with:
           file: coverage.xml
-          name: coverage-${{ matrix.os }}-${{ matrix.python-version }}
+          name: coverage-${{ matrix.os }}-${{ matrix.python-version }}-${{ matrix.cython }}
           token: ${{ secrets.CODECOV_TOKEN }}
           verbose: true
