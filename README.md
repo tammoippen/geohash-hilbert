@@ -1,10 +1,10 @@
 geohash-hilbert
 ===============
 
-[![CircleCI](https://circleci.com/gh/tammoippen/geohash-hilbert.svg?style=svg)](https://circleci.com/gh/tammoippen/geohash-hilbert)
-[![Coverage Status](https://coveralls.io/repos/github/tammoippen/geohash-hilbert/badge.svg?branch=master)](https://coveralls.io/github/tammoippen/geohash-hilbert?branch=master)
-[![Tested CPython Versions](https://img.shields.io/badge/cpython-2.7%2C%203.5%2C%203.6%2C%203.7%203.8-brightgreen.svg)](https://img.shields.io/badge/cpython-2.7%2C%203.5%2C%203.6%2C%203.7%203.8-brightgreen.svg)
-[![Tested PyPy Versions](https://img.shields.io/badge/pypy-2.7--7.3.0%2C%203.6--7.3.0-brightgreen.svg)](https://img.shields.io/badge/pypy-2.7--7.3.0%2C%203.6--7.3.0-brightgreen.svg)
+[![CI](https://github.com/tammoippen/geohash-hilbert/actions/workflows/CI.yml/badge.svg?branch=master)](https://github.com/tammoippen/geohash-hilbert/actions/workflows/CI.yml)
+[![codecov](https://codecov.io/github/tammoippen/geohash-hilbert/graph/badge.svg?token=APxQWQkPyT)](https://codecov.io/github/tammoippen/geohash-hilbert)
+[![Tested CPython Versions](https://img.shields.io/badge/cpython-3.9%2C%203.10%2C%203.11%2C%203.12%2C%203.13-brightgreen.svg)](https://img.shields.io/badge/cpython-3.9%2C%203.10%2C%203.11%2C%203.12%2C%203.13-brightgreen.svg)
+[![Tested PyPy Versions](https://img.shields.io/badge/pypy-3.9%2C%203.10-brightgreen.svg)](https://img.shields.io/badge/pypy-3.9%2C%203.10%2C%203.10-brightgreen.svg)
 [![PyPi version](https://img.shields.io/pypi/v/geohash-hilbert.svg)](https://pypi.python.org/pypi/geohash-hilbert)
 [![PyPi license](https://img.shields.io/pypi/l/geohash-hilbert.svg)](https://pypi.python.org/pypi/geohash-hilbert)
 
@@ -25,7 +25,13 @@ Out[4]:
  1.6763806343078613e-07, 8.381903171539307e-08)  # errors
 
 In [5]: ghh.encode?
-Signature: ghh.encode(lng, lat, precision=10, bits_per_char=6)
+Signature:
+ghh.encode(
+    lng: float,
+    lat: float,
+    precision: int = 10,
+    bits_per_char: Literal[2, 4, 6] = 6,
+) -> str
 Docstring:
 Encode a lng/lat position as a geohash using a hilbert curve
 
@@ -49,7 +55,7 @@ Type:      function
 
 
 In [7]: ghh.decode?
-Signature: ghh.decode(code, bits_per_char=6)
+Signature: ghh.decode(code: str, bits_per_char: Literal[2, 4, 6] = 6) -> tuple[float, float]
 Docstring:
 Decode a geohash on a hilbert curve as a lng/lat position
 
@@ -64,12 +70,12 @@ Parameters:
 
 Returns:
     Tuple[float, float]:  (lng, lat) coordinate for the geohash.
-File:      .../geohash_hilbert/_hilbert.py
+File:      ~/repos/geohash-hilbert/geohash_hilbert/_hilbert.py
 Type:      function
 
 
 In [8]: ghh.decode_exactly?
-Signature: ghh.decode_exactly(code, bits_per_char=6)
+Signature: ghh.decode_exactly(code: str, bits_per_char: Literal[2, 4, 6] = 6) -> tuple[float, float, float, float]
 Docstring:
 Decode a geohash on a hilbert curve as a lng/lat position with error-margins
 
@@ -84,7 +90,7 @@ Parameters:
 
 Returns:
     Tuple[float, float, float, float]:  (lng, lat, lng-error, lat-error) coordinate for the geohash.
-File:      .../geohash_hilbert/_hilbert.py
+File:      ~/repos/geohash-hilbert/geohash_hilbert/_hilbert.py
 Type:      function
 ```
 

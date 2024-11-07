@@ -1,9 +1,6 @@
-# -*- coding: utf-8 -*-
-from __future__ import absolute_import, division, print_function, unicode_literals
-
 # The MIT License
 #
-# Copyright (c) 2017 Tammo Ippen, tammo.ippen@posteo.de
+# Copyright (c) 2017 - 2024 Tammo Ippen, tammo.ippen@posteo.de
 #
 # Permission is hereby granted, free of charge, to any person obtaining a copy
 # of this software and associated documentation files (the "Software"), to deal
@@ -23,11 +20,25 @@ from __future__ import absolute_import, division, print_function, unicode_litera
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 # THE SOFTWARE.
 
+from typing import Any, Literal
+
 from ._hilbert import decode, decode_exactly, encode
-from ._int2str import encode_int
+from ._int2str import BitsPerChar, encode_int
 
 
-def neighbours(code, bits_per_char=6):
+Directions = Literal[
+    "north",
+    "north-east",
+    "east",
+    "south-east",
+    "south",
+    "south-west",
+    "west",
+    "north-west",
+]
+
+
+def neighbours(code: str, bits_per_char: BitsPerChar = 6) -> dict[Directions, str]:
     """Get the neighbouring geohashes for `code`.
 
     Look for the north, north-east, east, south-east, south, south-west, west,
@@ -62,29 +73,33 @@ def neighbours(code, bits_per_char=6):
     if west < -180:
         west += 360
 
-    neighbours_dict = {
-        'east': encode(east, lat,   precision, bits_per_char),  # noqa: E241
-        'west': encode(west, lat,   precision, bits_per_char),  # noqa: E241
+    neighbours_dict: dict[Directions, str] = {
+        "east": encode(east, lat, precision, bits_per_char),  # noqa: E241
+        "west": encode(west, lat, precision, bits_per_char),  # noqa: E241
     }
 
     if north <= 90:  # input cell not already at the north pole
-        neighbours_dict.update({
-            'north':      encode(lng,  north, precision, bits_per_char),  # noqa: E241
-            'north-east': encode(east, north, precision, bits_per_char),  # noqa: E241
-            'north-west': encode(west, north, precision, bits_per_char),  # noqa: E241
-        })
+        neighbours_dict.update(
+            {
+                "north": encode(lng, north, precision, bits_per_char),  # noqa: E241
+                "north-east": encode(east, north, precision, bits_per_char),  # noqa: E241
+                "north-west": encode(west, north, precision, bits_per_char),  # noqa: E241
+            }
+        )
 
     if south >= -90:  # input cell not already at the south pole
-        neighbours_dict.update({
-            'south':      encode(lng,  south, precision, bits_per_char),  # noqa: E241
-            'south-east': encode(east, south, precision, bits_per_char),  # noqa: E241
-            'south-west': encode(west, south, precision, bits_per_char),  # noqa: E241
-        })
+        neighbours_dict.update(
+            {
+                "south": encode(lng, south, precision, bits_per_char),  # noqa: E241
+                "south-east": encode(east, south, precision, bits_per_char),  # noqa: E241
+                "south-west": encode(west, south, precision, bits_per_char),  # noqa: E241
+            }
+        )
 
     return neighbours_dict
 
 
-def rectangle(code, bits_per_char=6):
+def rectangle(code: str, bits_per_char: BitsPerChar = 6) -> dict[str, Any]:
     """Builds a (geojson) rectangle from `code`
 
     The center of the rectangle decodes as the lng/lat for code and
@@ -101,35 +116,37 @@ def rectangle(code, bits_per_char=6):
     lng, lat, lng_err, lat_err = decode_exactly(code, bits_per_char)
 
     return {
-        'type': 'Feature',
-        'properties': {
-            'code': code,
-            'lng': lng,
-            'lat': lat,
-            'lng_err': lng_err,
-            'lat_err': lat_err,
-            'bits_per_char': bits_per_char,
+        "type": "Feature",
+        "properties": {
+            "code": code,
+            "lng": lng,
+            "lat": lat,
+            "lng_err": lng_err,
+            "lat_err": lat_err,
+            "bits_per_char": bits_per_char,
         },
-        'bbox': (
+        "bbox": (
             lng - lng_err,  # bottom left
             lat - lat_err,
             lng + lng_err,  # top right
             lat + lat_err,
         ),
-        'geometry': {
-            'type': 'Polygon',
-            'coordinates': [[
-                (lng - lng_err, lat - lat_err),
-                (lng + lng_err, lat - lat_err),
-                (lng + lng_err, lat + lat_err),
-                (lng - lng_err, lat + lat_err),
-                (lng - lng_err, lat - lat_err),
-            ]],
+        "geometry": {
+            "type": "Polygon",
+            "coordinates": [
+                [
+                    (lng - lng_err, lat - lat_err),
+                    (lng + lng_err, lat - lat_err),
+                    (lng + lng_err, lat + lat_err),
+                    (lng - lng_err, lat + lat_err),
+                    (lng - lng_err, lat - lat_err),
+                ]
+            ],
         },
     }
 
 
-def hilbert_curve(precision, bits_per_char=6):
+def hilbert_curve(precision: int, bits_per_char: BitsPerChar = 6) -> dict[str, Any]:
     """Build the (geojson) `LineString` of the used hilbert-curve
 
     Builds the `LineString` of the used hilbert-curve given the `precision` and
@@ -151,14 +168,11 @@ def hilbert_curve(precision, bits_per_char=6):
 
     coords = []
     for i in range(1 << bits):
-        code = encode_int(i, bits_per_char).rjust(precision, '0')
+        code = encode_int(i, bits_per_char).rjust(precision, "0")
         coords += [decode(code, bits_per_char)]
 
     return {
-        'type': 'Feature',
-        'properties': {},
-        'geometry': {
-            'type': 'LineString',
-            'coordinates': coords,
-        },
+        "type": "Feature",
+        "properties": {},
+        "geometry": {"type": "LineString", "coordinates": coords},
     }

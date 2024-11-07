@@ -1,6 +1,3 @@
-# -*- coding: utf-8 -*-
-from __future__ import absolute_import, division, print_function, unicode_literals
-
 from random import random
 
 import pytest
@@ -16,19 +13,21 @@ def rand_lat():
     return random() * 180 - 90
 
 
-@pytest.mark.parametrize('bpc', (2, 4, 6))
+@pytest.mark.parametrize("bpc", (2, 4, 6))
 def test_decode_empty(bpc):
-    assert (0, 0) == hilbert.decode('', bits_per_char=bpc)
-    assert (0, 0, 180, 90) == hilbert.decode_exactly('', bits_per_char=bpc)
+    assert (0, 0) == hilbert.decode("", bits_per_char=bpc)
+    assert (0, 0, 180, 90) == hilbert.decode_exactly("", bits_per_char=bpc)
 
 
-@pytest.mark.parametrize('prec', range(1, 15))
-@pytest.mark.parametrize('bpc', (2, 4, 6))
+@pytest.mark.parametrize("prec", range(1, 15))
+@pytest.mark.parametrize("bpc", (2, 4, 6))
 def test_encode_decode(bpc, prec):
     for _i in range(100):
         lng, lat = rand_lng(), rand_lat()
         code = hilbert.encode(lng, lat, precision=prec, bits_per_char=bpc)
-        lng_code, lat_code, lng_err, lat_err = hilbert.decode_exactly(code, bits_per_char=bpc)
+        lng_code, lat_code, lng_err, lat_err = hilbert.decode_exactly(
+            code, bits_per_char=bpc
+        )
 
         assert lng == pytest.approx(lng_code, abs=lng_err)
         assert lat == pytest.approx(lat_code, abs=lat_err)
@@ -36,14 +35,14 @@ def test_encode_decode(bpc, prec):
         assert (lng_code, lat_code) == hilbert.decode(code, bits_per_char=bpc)
 
 
-@pytest.mark.parametrize('bpc', (2, 4, 6))
+@pytest.mark.parametrize("bpc", (2, 4, 6))
 def test_bench_encode(benchmark, bpc):
     prec = 60 // bpc
     lng, lat = rand_lng(), rand_lat()
     benchmark(hilbert.encode, lng, lat, precision=prec, bits_per_char=bpc)
 
 
-@pytest.mark.parametrize('bpc', (2, 4, 6))
+@pytest.mark.parametrize("bpc", (2, 4, 6))
 def test_bench_decode(benchmark, bpc):
     prec = 60 // bpc
     lng, lat = rand_lng(), rand_lat()

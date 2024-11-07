@@ -6,7 +6,9 @@ build/
 .DS_Store
 .cache/
 .coverage
+coverage.xml
 cov_html/
+.ruff_cache/
 .pytest_cache/
 *.so
 *.c
@@ -22,3 +24,4 @@ poetry.lock
 .vscode/
 pip-wheel-metadata/
 .benchmarks/
+.mypy_cache/

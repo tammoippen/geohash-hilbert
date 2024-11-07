@@ -1,9 +1,6 @@
-# -*- coding: utf-8 -*-
-from __future__ import absolute_import, division, print_function, unicode_literals
-
 # The MIT License
 #
-# Copyright (c) 2017 Tammo Ippen, tammo.ippen@posteo.de
+# Copyright (c) 2017 - 2024 Tammo Ippen, tammo.ippen@posteo.de
 #
 # Permission is hereby granted, free of charge, to any person obtaining a copy
 # of this software and associated documentation files (the "Software"), to deal
@@ -25,10 +22,11 @@ from __future__ import absolute_import, division, print_function, unicode_litera
 
 from math import floor
 
-from ._int2str import decode_int, encode_int
+from ._int2str import BitsPerChar, decode_int, encode_int
 
 try:
     from geohash_hilbert._hilbert_cython import hash2xy_cython, MAX_BITS, xy2hash_cython
+
     CYTHON_AVAILABLE = True
 except ImportError:
     CYTHON_AVAILABLE = False
@@ -38,7 +36,9 @@ _LAT_INTERVAL = (-90.0, 90.0)
 _LNG_INTERVAL = (-180.0, 180.0)
 
 
-def encode(lng, lat, precision=10, bits_per_char=6):
+def encode(
+    lng: float, lat: float, precision: int = 10, bits_per_char: BitsPerChar = 6
+) -> str:
     """Encode a lng/lat position as a geohash using a hilbert curve
 
     This function encodes a lng/lat coordinate to a geohash of length `precision`
@@ -73,10 +73,10 @@ def encode(lng, lat, precision=10, bits_per_char=6):
     else:
         code = _xy2hash(x, y, dim)
 
-    return encode_int(code, bits_per_char).rjust(precision, '0')
+    return encode_int(code, bits_per_char).rjust(precision, "0")
 
 
-def decode(code, bits_per_char=6):
+def decode(code: str, bits_per_char: BitsPerChar = 6) -> tuple[float, float]:
     """Decode a geohash on a hilbert curve as a lng/lat position
 
     Decodes the geohash `code` as a lng/lat position. It assumes, that
@@ -94,13 +94,15 @@ def decode(code, bits_per_char=6):
     assert bits_per_char in (2, 4, 6)
 
     if len(code) == 0:
-        return 0., 0.
+        return 0.0, 0.0
 
     lng, lat, _lng_err, _lat_err = decode_exactly(code, bits_per_char)
     return lng, lat
 
 
-def decode_exactly(code, bits_per_char=6):
+def decode_exactly(
+    code: str, bits_per_char: BitsPerChar = 6
+) -> tuple[float, float, float, float]:
     """Decode a geohash on a hilbert curve as a lng/lat position with error-margins
 
     Decodes the geohash `code` as a lng/lat position with error-margins. It assumes,
@@ -118,7 +120,7 @@ def decode_exactly(code, bits_per_char=6):
     assert bits_per_char in (2, 4, 6)
 
     if len(code) == 0:
-        return 0., 0., _LNG_INTERVAL[1], _LAT_INTERVAL[1]
+        return 0.0, 0.0, _LNG_INTERVAL[1], _LAT_INTERVAL[1]
 
     bits = len(code) * bits_per_char
     level = bits >> 1
@@ -136,7 +138,7 @@ def decode_exactly(code, bits_per_char=6):
     return lng + lng_err, lat + lat_err, lng_err, lat_err
 
 
-def _lvl_error(level):
+def _lvl_error(level: int) -> tuple[float, float]:
     """Get the lng/lat error for the hilbert curve with the given level
 
     On every level, the error of the hilbert curve is halved, e.g.
@@ -154,7 +156,7 @@ def _lvl_error(level):
     return 180 * error, 90 * error
 
 
-def _coord2int(lng, lat, dim):
+def _coord2int(lng: float, lat: float, dim: int) -> tuple[int, int]:
     """Convert lon, lat values into a dim x dim-grid coordinate system.
 
     Parameters:
@@ -171,13 +173,13 @@ def _coord2int(lng, lat, dim):
     """
     assert dim >= 1
 
-    lat_y = (lat + _LAT_INTERVAL[1]) / 180.0 * dim   # [0 ... dim)
+    lat_y = (lat + _LAT_INTERVAL[1]) / 180.0 * dim  # [0 ... dim)
     lng_x = (lng + _LNG_INTERVAL[1]) / 360.0 * dim  # [0 ... dim)
 
     return min(dim - 1, int(floor(lng_x))), min(dim - 1, int(floor(lat_y)))
 
 
-def _int2coord(x, y, dim):
+def _int2coord(x: int, y: int, dim: int) -> tuple[float, float]:
     """Convert x, y values in dim x dim-grid coordinate system into lng, lat values.
 
     Parameters:
@@ -202,7 +204,7 @@ def _int2coord(x, y, dim):
 
 
 # only use python versions, when cython is not available
-def _xy2hash(x, y, dim):
+def _xy2hash(x: int, y: int, dim: int) -> int:
     """Convert (x, y) to hashcode.
 
     Based on the implementation here:
@@ -221,7 +223,7 @@ def _xy2hash(x, y, dim):
     """
     d = 0
     lvl = dim >> 1
-    while (lvl > 0):
+    while lvl > 0:
         rx = int((x & lvl) > 0)
         ry = int((y & lvl) > 0)
         d += lvl * lvl * ((3 * rx) ^ ry)
@@ -230,7 +232,7 @@ def _xy2hash(x, y, dim):
     return d
 
 
-def _hash2xy(hashcode, dim):
+def _hash2xy(hashcode: int, dim: int) -> tuple[int, int]:
     """Convert hashcode to (x, y).
 
     Based on the implementation here:
@@ -246,10 +248,10 @@ def _hash2xy(hashcode, dim):
     Returns:
         Tuple[int, int]: (x, y) point in dim x dim-grid system
     """
-    assert(hashcode <= dim * dim - 1)
+    assert hashcode <= dim * dim - 1
     x = y = 0
     lvl = 1
-    while (lvl < dim):
+    while lvl < dim:
         rx = 1 & (hashcode >> 1)
         ry = 1 & (hashcode ^ rx)
         x, y = _rotate(lvl, x, y, rx, ry)
@@ -260,7 +262,7 @@ def _hash2xy(hashcode, dim):
     return x, y
 
 
-def _rotate(n, x, y, rx, ry):
+def _rotate(n: int, x: int, y: int, rx: int, ry: int) -> tuple[int, int]:
     """Rotate and flip a quadrant appropriately
 
     Based on the implementation here:
