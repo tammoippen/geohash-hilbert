@@ -20,8 +20,12 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 # THE SOFTWARE.
 
+from typing import Literal
 
-def encode_int(code, bits_per_char=6):
+BitsPerChar = Literal[2, 4, 6]
+
+
+def encode_int(code: int, bits_per_char: BitsPerChar = 6) -> str:
     """Encode int into a string preserving order
 
     It is using 2, 4 or 6 bits per coding character (default 6).
@@ -46,7 +50,7 @@ def encode_int(code, bits_per_char=6):
     raise ValueError("`bits_per_char` must be in {6, 4, 2}")
 
 
-def decode_int(tag, bits_per_char=6):
+def decode_int(tag: str, bits_per_char: BitsPerChar = 6) -> int:
     """Decode string into int assuming encoding with `encode_int()`
 
     It is using 2, 4 or 6 bits per coding character (default 6).
@@ -79,7 +83,7 @@ _BASE64 = (
 _BASE64_MAP = {c: i for i, c in enumerate(_BASE64)}
 
 
-def _encode_int64(code):
+def _encode_int64(code: int) -> str:
     code_len = (code.bit_length() + 5) // 6  # 6 bit per code point
     res = ["0"] * code_len
     for i in range(code_len - 1, -1, -1):
@@ -88,7 +92,7 @@ def _encode_int64(code):
     return "".join(res)
 
 
-def _decode_int64(t):
+def _decode_int64(t: str) -> int:
     code = 0
     for ch in t:
         code <<= 6
@@ -96,20 +100,20 @@ def _decode_int64(t):
     return code
 
 
-def _encode_int16(code):
-    code = "" + hex(code)[2:]  # this makes it unicode in py2
-    if code.endswith("L"):
-        code = code[:-1]
-    return code
+def _encode_int16(code: int) -> str:
+    code_str = "" + hex(code)[2:]  # this makes it unicode in py2
+    if code_str.endswith("L"):
+        code_str = code_str[:-1]
+    return code_str
 
 
-def _decode_int16(t):
+def _decode_int16(t: str) -> int:
     if len(t) == 0:
         return 0
     return int(t, 16)
 
 
-def _encode_int4(code):
+def _encode_int4(code: int) -> str:
     _BASE4 = "0123"
     code_len = (code.bit_length() + 1) // 2  # two bit per code point
     res = ["0"] * code_len
@@ -121,7 +125,7 @@ def _encode_int4(code):
     return "".join(res)
 
 
-def _decode_int4(t):
+def _decode_int4(t: str) -> int:
     if len(t) == 0:
         return 0
     return int(t, 4)

@@ -20,11 +20,25 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 # THE SOFTWARE.
 
+from typing import Any, Literal
+
 from ._hilbert import decode, decode_exactly, encode
-from ._int2str import encode_int
+from ._int2str import BitsPerChar, encode_int
 
 
-def neighbours(code, bits_per_char=6):
+Directions = Literal[
+    "north",
+    "north-east",
+    "east",
+    "south-east",
+    "south",
+    "south-west",
+    "west",
+    "north-west",
+]
+
+
+def neighbours(code: str, bits_per_char: BitsPerChar = 6) -> dict[Directions, str]:
     """Get the neighbouring geohashes for `code`.
 
     Look for the north, north-east, east, south-east, south, south-west, west,
@@ -59,7 +73,7 @@ def neighbours(code, bits_per_char=6):
     if west < -180:
         west += 360
 
-    neighbours_dict = {
+    neighbours_dict: dict[Directions, str] = {
         "east": encode(east, lat, precision, bits_per_char),  # noqa: E241
         "west": encode(west, lat, precision, bits_per_char),  # noqa: E241
     }
@@ -85,7 +99,7 @@ def neighbours(code, bits_per_char=6):
     return neighbours_dict
 
 
-def rectangle(code, bits_per_char=6):
+def rectangle(code: str, bits_per_char: BitsPerChar = 6) -> dict[str, Any]:
     """Builds a (geojson) rectangle from `code`
 
     The center of the rectangle decodes as the lng/lat for code and
@@ -132,7 +146,7 @@ def rectangle(code, bits_per_char=6):
     }
 
 
-def hilbert_curve(precision, bits_per_char=6):
+def hilbert_curve(precision: int, bits_per_char: BitsPerChar = 6) -> dict[str, Any]:
     """Build the (geojson) `LineString` of the used hilbert-curve
 
     Builds the `LineString` of the used hilbert-curve given the `precision` and
@@ -160,8 +174,5 @@ def hilbert_curve(precision, bits_per_char=6):
     return {
         "type": "Feature",
         "properties": {},
-        "geometry": {
-            "type": "LineString",
-            "coordinates": coords,
-        },
+        "geometry": {"type": "LineString", "coordinates": coords},
     }

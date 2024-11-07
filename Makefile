@@ -7,7 +7,7 @@ fmt:
 check:
 	poetry run ruff format --check .
 	poetry run ruff check .
-	# poetry run mypy geohash_hilbert
+	poetry run mypy geohash_hilbert
 
 test:
 	PYTHONDEVMODE=1 poetry run pytest -vvv -s

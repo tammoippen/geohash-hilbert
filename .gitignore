@@ -24,3 +24,4 @@ poetry.lock
 .vscode/
 pip-wheel-metadata/
 .benchmarks/
+.mypy_cache/
