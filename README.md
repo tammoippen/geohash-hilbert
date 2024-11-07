@@ -1,10 +1,10 @@
 geohash-hilbert
 ===============
 
-[![CircleCI](https://circleci.com/gh/tammoippen/geohash-hilbert.svg?style=svg)](https://circleci.com/gh/tammoippen/geohash-hilbert)
-[![Coverage Status](https://coveralls.io/repos/github/tammoippen/geohash-hilbert/badge.svg?branch=master)](https://coveralls.io/github/tammoippen/geohash-hilbert?branch=master)
-[![Tested CPython Versions](https://img.shields.io/badge/cpython-2.7%2C%203.5%2C%203.6%2C%203.7%203.8-brightgreen.svg)](https://img.shields.io/badge/cpython-2.7%2C%203.5%2C%203.6%2C%203.7%203.8-brightgreen.svg)
-[![Tested PyPy Versions](https://img.shields.io/badge/pypy-2.7--7.3.0%2C%203.6--7.3.0-brightgreen.svg)](https://img.shields.io/badge/pypy-2.7--7.3.0%2C%203.6--7.3.0-brightgreen.svg)
+[![CI](https://github.com/tammoippen/geohash-hilbert/actions/workflows/CI.yml/badge.svg?branch=master)](https://github.com/tammoippen/geohash-hilbert/actions/workflows/CI.yml)
+[![codecov](https://codecov.io/github/tammoippen/geohash-hilbert/graph/badge.svg?token=APxQWQkPyT)](https://codecov.io/github/tammoippen/geohash-hilbert)
+[![Tested CPython Versions](https://img.shields.io/badge/cpython-3.9%2C%203.10%2C%203.11%2C%203.12%2C%203.13-brightgreen.svg)](https://img.shields.io/badge/cpython-3.9%2C%203.10%2C%203.11%2C%203.12%2C%203.13-brightgreen.svg)
+[![Tested PyPy Versions](https://img.shields.io/badge/pypy-3.9%2C%203.10-brightgreen.svg)](https://img.shields.io/badge/pypy-3.9%2C%203.10%2C%203.10-brightgreen.svg)
 [![PyPi version](https://img.shields.io/pypi/v/geohash-hilbert.svg)](https://pypi.python.org/pypi/geohash-hilbert)
 [![PyPi license](https://img.shields.io/pypi/l/geohash-hilbert.svg)](https://pypi.python.org/pypi/geohash-hilbert)
 
