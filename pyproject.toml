@@ -37,15 +37,12 @@ python = "^3.9"
 
 [tool.poetry.group.dev.dependencies]
 
-ruff = "*"
 coveralls = "*"
+cython = "*"
 pytest = "*"
 pytest-benchmark = "*"
 pytest-cov = "*"
-cython = { version = "*", optional = true }
-
-[tool.poetry.extras]
-cython = ["cython"]
+ruff = "*"
 
 [build-system]
 requires = ["poetry>=0.12"]

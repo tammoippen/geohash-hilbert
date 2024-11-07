@@ -32,6 +32,8 @@ jobs:
           python-version: 'pypy-3.9'
         - os: windows-latest
           python-version: 'pypy-3.10'
+        # - os: windows-latest
+        #   cython: 'yes'
     defaults:
       run:
         shell: bash
@@ -67,11 +69,8 @@ jobs:
         run: poetry install
 
       - name: Build Cython file
-        run: |
-          poetry run pip install cython
-          poetry run cythonize -i geohash_hilbert/*.pyx
-          poetry show
-          python -c 'import geohash_hilbert as ghh; print(ghh._hilbert.CYTHON_AVAILABLE)'
+        if: ${{ matrix.cython == 'yes' }}
+        run: make cythonize
 
       - name: Style
         if: ${{ ! startsWith(matrix.python-version, 'pypy-') && startsWith(matrix.os, 'ubuntu') }}

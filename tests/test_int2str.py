@@ -1,7 +1,7 @@
 from random import randint
+import sys
 
 import pytest
-import six
 
 from geohash_hilbert._int2str import decode_int, encode_int
 
@@ -34,9 +34,9 @@ def test_empty():
 def test_randoms(bpc):
     prev_code = None
     for _i in range(100):
-        i = randint(0, six.MAXSIZE)
+        i = randint(0, sys.maxsize)
         code = encode_int(i, bpc)
-        assert isinstance(code, six.text_type)
+        assert isinstance(code, str)
         assert code != i
         assert i == decode_int(code, bpc)
 
