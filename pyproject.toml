@@ -43,6 +43,8 @@ pytest = "*"
 pytest-benchmark = "*"
 pytest-cov = "*"
 ruff = "*"
+# cython needs distutils, but 3.12 removed it (https://github.com/cython/cython/issues/5751)
+setuptools = { version = "*" , python = ">=3.12" }
 
 [build-system]
 requires = ["poetry>=0.12"]
