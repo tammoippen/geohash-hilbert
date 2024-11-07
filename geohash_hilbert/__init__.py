@@ -28,10 +28,10 @@ from ._utils import hilbert_curve, neighbours, rectangle
 
 
 __all__ = [
-    'decode_exactly',
-    'decode',
-    'encode',
-    'hilbert_curve',
-    'neighbours',
-    'rectangle',
+    "decode_exactly",
+    "decode",
+    "encode",
+    "hilbert_curve",
+    "neighbours",
+    "rectangle",
 ]

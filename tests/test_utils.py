@@ -18,19 +18,19 @@ def rand_lat():
     return random() * 180 - 90
 
 
-@pytest.mark.parametrize('bpc', (2, 4, 6))
-@pytest.mark.parametrize('prec', range(2, 7))
+@pytest.mark.parametrize("bpc", (2, 4, 6))
+@pytest.mark.parametrize("prec", range(2, 7))
 def test_neighbours(bpc, prec):
     for _i in range(100):
         code = encode(rand_lng(), rand_lat(), bits_per_char=bpc, precision=prec)
         lng, lat, lng_err, lat_err = decode_exactly(code, bits_per_char=bpc)
         neighbours = utils.neighbours(code, bpc)
 
-        expected_directions = {'east', 'west'}
+        expected_directions = {"east", "west"}
         if lat + lat_err < 90:  # more earth to the north
-            expected_directions.update({'north', 'north-west', 'north-east'})
+            expected_directions.update({"north", "north-west", "north-east"})
         if lat - lat_err > -90:  # more earth to the south
-            expected_directions.update({'south', 'south-west', 'south-east'})
+            expected_directions.update({"south", "south-west", "south-east"})
 
         assert expected_directions == set(neighbours.keys())
 
@@ -46,17 +46,25 @@ def test_neighbours(bpc, prec):
             assert lat_err == n_lat_err
 
             # neighbour is in disc 4x error
-            assert (lng == n_lng or  # east / west
-                    lng - 2 * lng_err == n_lng or lng - 2 * lng_err + 360 == n_lng or  # south
-                    lng + 2 * lng_err == n_lng or lng + 2 * lng_err - 360 == n_lng)  # north
+            assert (
+                lng == n_lng  # east / west
+                or lng - 2 * lng_err == n_lng
+                or lng - 2 * lng_err + 360 == n_lng  # south
+                or lng + 2 * lng_err == n_lng
+                or lng + 2 * lng_err - 360 == n_lng
+            )  # north
 
-            assert (lat == n_lat or  # north / south
-                    lat - 2 * lat_err == n_lat or lat - 2 * lat_err + 180 == n_lat or  # west
-                    lat + 2 * lat_err == n_lat or lat + 2 * lat_err - 180 == n_lat)  # east
+            assert (
+                lat == n_lat  # north / south
+                or lat - 2 * lat_err == n_lat
+                or lat - 2 * lat_err + 180 == n_lat  # west
+                or lat + 2 * lat_err == n_lat
+                or lat + 2 * lat_err - 180 == n_lat
+            )  # east
 
 
-@pytest.mark.parametrize('bpc', (2, 4, 6))
-@pytest.mark.parametrize('prec', range(1, 7))
+@pytest.mark.parametrize("bpc", (2, 4, 6))
+@pytest.mark.parametrize("prec", range(1, 7))
 def test_rectangle(bpc, prec):
     code = encode(rand_lng(), rand_lat(), bits_per_char=bpc, precision=prec)
     lng, lat, lng_err, lat_err = decode_exactly(code, bits_per_char=bpc)
@@ -64,20 +72,19 @@ def test_rectangle(bpc, prec):
     rect = utils.rectangle(code, bits_per_char=bpc)
 
     assert isinstance(rect, dict)
-    assert rect['type'] == 'Feature'
-    assert rect['geometry']['type'] == 'Polygon'
-    assert rect['bbox'] == (lng - lng_err, lat - lat_err,
-                            lng + lng_err, lat + lat_err)
-    assert rect['properties'] == {
-        'code': code,
-        'lng': lng,
-        'lat': lat,
-        'lng_err': lng_err,
-        'lat_err': lat_err,
-        'bits_per_char': bpc,
+    assert rect["type"] == "Feature"
+    assert rect["geometry"]["type"] == "Polygon"
+    assert rect["bbox"] == (lng - lng_err, lat - lat_err, lng + lng_err, lat + lat_err)
+    assert rect["properties"] == {
+        "code": code,
+        "lng": lng,
+        "lat": lat,
+        "lng_err": lng_err,
+        "lat_err": lat_err,
+        "bits_per_char": bpc,
     }
 
-    coords = rect['geometry']['coordinates']
+    coords = rect["geometry"]["coordinates"]
     assert 1 == len(coords)  # one external ring
     assert 5 == len(coords[0])  # rectangle has 5 coordinates
 
@@ -89,17 +96,17 @@ def test_rectangle(bpc, prec):
     assert (lng - lng_err, lat - lat_err) == coords[0][4]  # lower left
 
 
-@pytest.mark.parametrize('bpc', (2, 4, 6))
-@pytest.mark.parametrize('prec', range(1, 4))
+@pytest.mark.parametrize("bpc", (2, 4, 6))
+@pytest.mark.parametrize("prec", range(1, 4))
 def test_hilbert_curve(bpc, prec):
     hc = utils.hilbert_curve(prec, bpc)
     bits = bpc * prec
 
     assert isinstance(hc, dict)
-    assert hc['type'] == 'Feature'
-    assert hc['geometry']['type'] == 'LineString'
+    assert hc["type"] == "Feature"
+    assert hc["geometry"]["type"] == "LineString"
 
-    coords = hc['geometry']['coordinates']
+    coords = hc["geometry"]["coordinates"]
     assert 1 << bits == len(coords)
 
     for i, coord in enumerate(coords):

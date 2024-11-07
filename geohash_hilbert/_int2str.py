@@ -37,7 +37,7 @@ def encode_int(code, bits_per_char=6):
         str: the encoded integer
     """
     if code < 0:
-        raise ValueError('Only positive ints are allowed!')
+        raise ValueError("Only positive ints are allowed!")
 
     if bits_per_char == 6:
         return _encode_int64(code)
@@ -46,7 +46,7 @@ def encode_int(code, bits_per_char=6):
     if bits_per_char == 2:
         return _encode_int4(code)
 
-    raise ValueError('`bits_per_char` must be in {6, 4, 2}')
+    raise ValueError("`bits_per_char` must be in {6, 4, 2}")
 
 
 def decode_int(tag, bits_per_char=6):
@@ -68,27 +68,27 @@ def decode_int(tag, bits_per_char=6):
     if bits_per_char == 2:
         return _decode_int4(tag)
 
-    raise ValueError('`bits_per_char` must be in {6, 4, 2}')
+    raise ValueError("`bits_per_char` must be in {6, 4, 2}")
 
 
 # Own base64 encoding with integer order preservation via lexicographical (byte) order.
 _BASE64 = (
-    '0123456789'  # noqa: E262    #   10    0x30 - 0x39
-    '@'                           # +  1    0x40
-    'ABCDEFGHIJKLMNOPQRSTUVWXYZ'  # + 26    0x41 - 0x5A
-    '_'                           # +  1    0x5F
-    'abcdefghijklmnopqrstuvwxyz'  # + 26    0x61 - 0x7A
-)                                 # = 64    0x30 - 0x7A
+    "0123456789"  # noqa: E262    #   10    0x30 - 0x39
+    "@"  # +  1    0x40
+    "ABCDEFGHIJKLMNOPQRSTUVWXYZ"  # + 26    0x41 - 0x5A
+    "_"  # +  1    0x5F
+    "abcdefghijklmnopqrstuvwxyz"  # + 26    0x61 - 0x7A
+)  # = 64    0x30 - 0x7A
 _BASE64_MAP = {c: i for i, c in enumerate(_BASE64)}
 
 
 def _encode_int64(code):
     code_len = (code.bit_length() + 5) // 6  # 6 bit per code point
-    res = ['0'] * code_len
+    res = ["0"] * code_len
     for i in range(code_len - 1, -1, -1):
         res[i] = _BASE64[code & 0b111111]
         code >>= 6
-    return ''.join(res)
+    return "".join(res)
 
 
 def _decode_int64(t):
@@ -100,8 +100,8 @@ def _decode_int64(t):
 
 
 def _encode_int16(code):
-    code = '' + hex(code)[2:]  # this makes it unicode in py2
-    if code.endswith('L'):
+    code = "" + hex(code)[2:]  # this makes it unicode in py2
+    if code.endswith("L"):
         code = code[:-1]
     return code
 
@@ -113,15 +113,15 @@ def _decode_int16(t):
 
 
 def _encode_int4(code):
-    _BASE4 = '0123'
+    _BASE4 = "0123"
     code_len = (code.bit_length() + 1) // 2  # two bit per code point
-    res = ['0'] * code_len
+    res = ["0"] * code_len
 
     for i in range(code_len - 1, -1, -1):
         res[i] = _BASE4[code & 0b11]
         code >>= 2
 
-    return ''.join(res)
+    return "".join(res)
 
 
 def _decode_int4(t):

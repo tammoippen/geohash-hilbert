@@ -1,7 +1,8 @@
 setup_cython = {}
 try:
     from Cython.Build import cythonize
-    setup_cython = {'ext_modules': cythonize('geohash_hilbert/_hilbert_cython.pyx')}
+
+    setup_cython = {"ext_modules": cythonize("geohash_hilbert/_hilbert_cython.pyx")}
 except ImportError:
     pass
 

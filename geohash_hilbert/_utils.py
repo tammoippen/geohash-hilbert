@@ -63,23 +63,27 @@ def neighbours(code, bits_per_char=6):
         west += 360
 
     neighbours_dict = {
-        'east': encode(east, lat,   precision, bits_per_char),  # noqa: E241
-        'west': encode(west, lat,   precision, bits_per_char),  # noqa: E241
+        "east": encode(east, lat, precision, bits_per_char),  # noqa: E241
+        "west": encode(west, lat, precision, bits_per_char),  # noqa: E241
     }
 
     if north <= 90:  # input cell not already at the north pole
-        neighbours_dict.update({
-            'north':      encode(lng,  north, precision, bits_per_char),  # noqa: E241
-            'north-east': encode(east, north, precision, bits_per_char),  # noqa: E241
-            'north-west': encode(west, north, precision, bits_per_char),  # noqa: E241
-        })
+        neighbours_dict.update(
+            {
+                "north": encode(lng, north, precision, bits_per_char),  # noqa: E241
+                "north-east": encode(east, north, precision, bits_per_char),  # noqa: E241
+                "north-west": encode(west, north, precision, bits_per_char),  # noqa: E241
+            }
+        )
 
     if south >= -90:  # input cell not already at the south pole
-        neighbours_dict.update({
-            'south':      encode(lng,  south, precision, bits_per_char),  # noqa: E241
-            'south-east': encode(east, south, precision, bits_per_char),  # noqa: E241
-            'south-west': encode(west, south, precision, bits_per_char),  # noqa: E241
-        })
+        neighbours_dict.update(
+            {
+                "south": encode(lng, south, precision, bits_per_char),  # noqa: E241
+                "south-east": encode(east, south, precision, bits_per_char),  # noqa: E241
+                "south-west": encode(west, south, precision, bits_per_char),  # noqa: E241
+            }
+        )
 
     return neighbours_dict
 
@@ -101,30 +105,32 @@ def rectangle(code, bits_per_char=6):
     lng, lat, lng_err, lat_err = decode_exactly(code, bits_per_char)
 
     return {
-        'type': 'Feature',
-        'properties': {
-            'code': code,
-            'lng': lng,
-            'lat': lat,
-            'lng_err': lng_err,
-            'lat_err': lat_err,
-            'bits_per_char': bits_per_char,
+        "type": "Feature",
+        "properties": {
+            "code": code,
+            "lng": lng,
+            "lat": lat,
+            "lng_err": lng_err,
+            "lat_err": lat_err,
+            "bits_per_char": bits_per_char,
         },
-        'bbox': (
+        "bbox": (
             lng - lng_err,  # bottom left
             lat - lat_err,
             lng + lng_err,  # top right
             lat + lat_err,
         ),
-        'geometry': {
-            'type': 'Polygon',
-            'coordinates': [[
-                (lng - lng_err, lat - lat_err),
-                (lng + lng_err, lat - lat_err),
-                (lng + lng_err, lat + lat_err),
-                (lng - lng_err, lat + lat_err),
-                (lng - lng_err, lat - lat_err),
-            ]],
+        "geometry": {
+            "type": "Polygon",
+            "coordinates": [
+                [
+                    (lng - lng_err, lat - lat_err),
+                    (lng + lng_err, lat - lat_err),
+                    (lng + lng_err, lat + lat_err),
+                    (lng - lng_err, lat + lat_err),
+                    (lng - lng_err, lat - lat_err),
+                ]
+            ],
         },
     }
 
@@ -151,14 +157,14 @@ def hilbert_curve(precision, bits_per_char=6):
 
     coords = []
     for i in range(1 << bits):
-        code = encode_int(i, bits_per_char).rjust(precision, '0')
+        code = encode_int(i, bits_per_char).rjust(precision, "0")
         coords += [decode(code, bits_per_char)]
 
     return {
-        'type': 'Feature',
-        'properties': {},
-        'geometry': {
-            'type': 'LineString',
-            'coordinates': coords,
+        "type": "Feature",
+        "properties": {},
+        "geometry": {
+            "type": "LineString",
+            "coordinates": coords,
         },
     }

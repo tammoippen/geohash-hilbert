@@ -29,6 +29,7 @@ from ._int2str import decode_int, encode_int
 
 try:
     from geohash_hilbert._hilbert_cython import hash2xy_cython, MAX_BITS, xy2hash_cython
+
     CYTHON_AVAILABLE = True
 except ImportError:
     CYTHON_AVAILABLE = False
@@ -73,7 +74,7 @@ def encode(lng, lat, precision=10, bits_per_char=6):
     else:
         code = _xy2hash(x, y, dim)
 
-    return encode_int(code, bits_per_char).rjust(precision, '0')
+    return encode_int(code, bits_per_char).rjust(precision, "0")
 
 
 def decode(code, bits_per_char=6):
@@ -94,7 +95,7 @@ def decode(code, bits_per_char=6):
     assert bits_per_char in (2, 4, 6)
 
     if len(code) == 0:
-        return 0., 0.
+        return 0.0, 0.0
 
     lng, lat, _lng_err, _lat_err = decode_exactly(code, bits_per_char)
     return lng, lat
@@ -118,7 +119,7 @@ def decode_exactly(code, bits_per_char=6):
     assert bits_per_char in (2, 4, 6)
 
     if len(code) == 0:
-        return 0., 0., _LNG_INTERVAL[1], _LAT_INTERVAL[1]
+        return 0.0, 0.0, _LNG_INTERVAL[1], _LAT_INTERVAL[1]
 
     bits = len(code) * bits_per_char
     level = bits >> 1
@@ -171,7 +172,7 @@ def _coord2int(lng, lat, dim):
     """
     assert dim >= 1
 
-    lat_y = (lat + _LAT_INTERVAL[1]) / 180.0 * dim   # [0 ... dim)
+    lat_y = (lat + _LAT_INTERVAL[1]) / 180.0 * dim  # [0 ... dim)
     lng_x = (lng + _LNG_INTERVAL[1]) / 360.0 * dim  # [0 ... dim)
 
     return min(dim - 1, int(floor(lng_x))), min(dim - 1, int(floor(lat_y)))
@@ -221,7 +222,7 @@ def _xy2hash(x, y, dim):
     """
     d = 0
     lvl = dim >> 1
-    while (lvl > 0):
+    while lvl > 0:
         rx = int((x & lvl) > 0)
         ry = int((y & lvl) > 0)
         d += lvl * lvl * ((3 * rx) ^ ry)
@@ -246,10 +247,10 @@ def _hash2xy(hashcode, dim):
     Returns:
         Tuple[int, int]: (x, y) point in dim x dim-grid system
     """
-    assert(hashcode <= dim * dim - 1)
+    assert hashcode <= dim * dim - 1
     x = y = 0
     lvl = 1
-    while (lvl < dim):
+    while lvl < dim:
         rx = 1 & (hashcode >> 1)
         ry = 1 & (hashcode ^ rx)
         x, y = _rotate(lvl, x, y, rx, ry)
