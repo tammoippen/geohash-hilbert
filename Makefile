@@ -14,4 +14,4 @@ test:
 
 cythonize:
 	poetry run cythonize -i geohash_hilbert/*.pyx
-	poetry run python -c "import geohash_hilbert as ghh; print(ghh._hilbert.CYTHON_AVAILABLE)""
+	poetry run python -c "import geohash_hilbert as ghh; print(ghh._hilbert.CYTHON_AVAILABLE)"
